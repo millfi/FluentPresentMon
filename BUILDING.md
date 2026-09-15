@@ -77,11 +77,11 @@ To build and validate a local unsigned Release MSIX without certificate setup, r
 > .\Tools\build-installer.ps1 -UnsignedRelease
 ```
 
-The helper builds the capture application, provider, console and SDK loader, then builds an isolated framework-dependent UI and validates the MSIX. `build\Release\MSIX\latest-package.txt` points to the most recent successful package. Use `-SkipRestore` after restore and `-RunNativeTests` for the capture tests. The unsigned package is for validation; Windows requires a trusted signature to install it. See [MSIX deployment](IntelPresentMon/PMInstaller/README.md) for signing, offline installation, MSI migration and size accounting.
+The helper builds the capture application, provider, console and SDK loader, then builds an isolated framework-dependent UI and validates the MSIX. `build\Release\MSIX\latest-package.txt` points to the most recent successful package. Use `-SkipRestore` after restore and `-RunNativeTests` for the capture tests. On Windows 11, the unsigned package uses the Windows unsigned publisher namespace and can be installed for local testing with `Add-AppxPackage -AllowUnsigned` from an administrator PowerShell; its package identity is intentionally different from a signed build. See [MSIX deployment](IntelPresentMon/PMInstaller/README.md) for signing, offline installation, MSI migration and size accounting.
 
 The installer uses Microsoft-signed Windows App SDK and VCLibs framework packages shared with other MSIX apps. DirectML and ONNX Runtime are not in the PresentMon package; they remain in Microsoft's standard framework. `Dependencies\x64` provides the original signed dependencies for offline installation. WiX is no longer required by the installer helper.
 
-When building native solution projects directly, pass `/p:PlatformToolset=v145` and configure vcpkg MSBuild integration. Historical WiX projects remain for legacy consumers; use `Tools\build-installer.ps1` for the current MSIX distribution.
+When building native solution projects directly, pass `/p:PlatformToolset=v145` and configure vcpkg MSBuild integration. `Reflector` is a native refresh tool for the checked-in reflection header, and `PresentMonMsixIdentity` supplies native MSIX identity and certificate hash operations. Historical WiX projects remain for legacy consumers; use `Tools\build-installer.ps1` for the current MSIX distribution.
 
 Restore the native WinUI project first with `bootstrap.ps1`. Normal UI builds remain unpackaged and self-contained under `build\Debug\ui` or `build\Release\ui`. The complete development `ui` directory must stay next to `PresentMon.exe`. MSIX builds use `/p:PresentMonMsix=true`, separate intermediates and `build\Release\msix-ui`; these binaries require package registration and the declared frameworks. Neither deployment requires .NET. Overlay shaders, presets and blocklists are staged by `KernelProcess`.
 
@@ -93,7 +93,7 @@ To iterate on the UI alone:
 
 Pass `-RunTests` to `build-ui-cpp.ps1` to run native core and protocol checks, backdrop smoke, shell smoke, and installer-harvest validators. When directly building `KernelProcess.vcxproj`, `/p:SkipNativeGuiBuild=true` skips its WinUI build dependency. Use this only when the UI output is already staged or when testing headless commands. `Release-EDSS` uses the Release WinUI payload.
 
-Installer regression checks are in `IntelPresentMon\PMInstaller\test-winui-harvest.ps1` and `test-winui-language-metadata.ps1`. The harvest test verifies the native x64 executable, Windows App SDK XAML runtime, resources, and absence of managed runtime files. The language metadata test takes `-WixDirectory` (the directory containing `wix.dll`) and `-ExtensionPath` (the built `PMInstallerExtension.dll`). The installer extension normalizes only eight Windows App SDK language metadata entries that WiX 3 cannot represent; the runtime files themselves remain unchanged and MSI validation stays enabled.
+Installer regression checks are in `IntelPresentMon\PMInstaller\test-winui-harvest.ps1` and `test-winui-language-metadata.ps1`. The harvest test verifies the native x64 executable, Windows App SDK XAML runtime, resources, and absence of managed runtime files. The language metadata test verifies that the harvest script writes neutral language metadata for the eight Windows App SDK framework entries that WiX 3 cannot represent; the runtime files themselves remain unchanged and MSI validation stays enabled.
 
 ## Running PresentMon
 

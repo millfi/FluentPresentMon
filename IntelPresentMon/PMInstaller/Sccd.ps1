@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
-if (-not ('PresentMon.Packaging.Identity' -as [type])) {
-    Add-Type -Path (Join-Path $PSScriptRoot 'MsixIdentity.cs')
+if (-not (Get-Command Get-MsixFamilyName -ErrorAction SilentlyContinue)) {
+    . (Join-Path $PSScriptRoot 'Msix.ps1')
 }
 
 function Get-MsixEtwCapabilities {
@@ -67,7 +67,16 @@ function Assert-MsixSigningSccd {
     $location = if ($MachineCertificateStore) { 'LocalMachine' } else { 'CurrentUser' }
     $certificate = Get-Item -LiteralPath "Cert:\$location\$CertificateStore\$CertificateThumbprint" -ErrorAction Stop
     if ($certificate.Subject -cne $Publisher) { throw 'The signing certificate subject must match Publisher.' }
-    $familyName = [PresentMon.Packaging.Identity]::FamilyName('Fluent.PresentMon', $Publisher)
-    $hash = [PresentMon.Packaging.Identity]::CertificateSignatureHash($certificate.Handle)
+    $tempCertificate = Join-Path ([IO.Path]::GetTempPath()) ('presentmon-cert-' + [guid]::NewGuid().ToString('N') + '.cer')
+    try {
+        [IO.File]::WriteAllBytes($tempCertificate, $certificate.RawData)
+        $familyName = Get-MsixFamilyName -Name 'Fluent.PresentMon' -Publisher $Publisher
+        $hash = Get-MsixCertificateSignatureHash -CertificatePath $tempCertificate
+    }
+    finally {
+        if (Test-Path -LiteralPath $tempCertificate) {
+            Remove-Item -LiteralPath $tempCertificate -Force
+        }
+    }
     Assert-MsixSccd -Descriptor (Read-MsixSccd $SccdPath) -FamilyName $familyName -CertificateSignatureHash $hash
 }

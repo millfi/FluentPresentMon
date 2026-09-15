@@ -91,6 +91,11 @@ try {
     # Normalize the environment key casing before launching .NET Framework MSBuild.
     Remove-Item Env:PATH -ErrorAction SilentlyContinue
     $env:Path = $originalExecutablePath
+    $identityArguments = @(
+        "/m:1", "/nr:false", "/nologo", "/verbosity:minimal", "/p:Configuration=$nativeConfiguration", "/p:Platform=x64",
+        "/p:PlatformToolset=$PlatformToolset", "/p:SolutionDir=$repoRoot\"
+    )
+    Invoke-Checked $msbuild (@("IntelPresentMon\PMInstaller\MsixIdentity.vcxproj") + $identityArguments)
     $nativeArguments = @(
         "/m:4", "/nr:false", "/nologo", "/verbosity:minimal", "/p:CL_MPCount=4", "/p:Configuration=$nativeConfiguration", "/p:Platform=x64",
         "/p:PlatformToolset=$PlatformToolset",

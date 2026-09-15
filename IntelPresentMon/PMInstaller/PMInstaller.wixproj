@@ -32,9 +32,15 @@
     </SuppressIces>
   </PropertyGroup>
   <PropertyGroup>
+    <ConsoleAppRoot Condition="'$(ConsoleAppRoot)'=='' AND '$(SolutionDir)'!=''">$(SolutionDir)build\Release</ConsoleAppRoot>
+    <ConsoleAppRoot Condition="'$(ConsoleAppRoot)'==''">$(MSBuildThisFileDirectory)..\..\build\Release</ConsoleAppRoot>
+    <ConsoleAppPath Condition="'$(ConsoleAppPath)'==''">$(ConsoleAppRoot)\PresentMon-$(PresentMonVersion)-x64.exe</ConsoleAppPath>
+    <ConsoleAppFilename Condition="'$(ConsoleAppFilename)'==''">PresentMon-$(PresentMonVersion)-x64.exe</ConsoleAppFilename>
+    <HasConsoleApp Condition="'$(HasConsoleApp)'=='' AND Exists('$(ConsoleAppPath)')">true</HasConsoleApp>
+    <HasConsoleApp Condition="'$(HasConsoleApp)'==''">false</HasConsoleApp>
     <WinUIOutputDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\build\$(Configuration)\ui'))</WinUIOutputDir>
     <WinUIHarvestFile>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)', '$(IntermediateOutputPath)', 'WinUIFiles.wxs'))</WinUIHarvestFile>
-    <DefineConstants>$(DefineConstants);PM.ServiceDirId=service_folder;WinUIOutputDir=$(WinUIOutputDir)</DefineConstants>
+    <DefineConstants>$(DefineConstants);PM.ServiceDirId=service_folder;WinUIOutputDir=$(WinUIOutputDir);ConsoleAppPath=$(ConsoleAppPath);ConsoleAppFilename=$(ConsoleAppFilename);HasConsoleApp=$(HasConsoleApp)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PresentMon.wxs" />
@@ -53,10 +59,6 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <WixExtension Include="PMInstallerExtension">
-      <HintPath>..\..\build\obj\PMInstallerExtension-$(Configuration)\PMInstallerExtension.dll</HintPath>
-      <Name>PMInstallerExtension</Name>
-    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>

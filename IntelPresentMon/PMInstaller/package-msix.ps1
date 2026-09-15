@@ -113,7 +113,9 @@ if (-not $resourceDump.SelectSingleNode('//ResourceMap[@name="Fluent.PresentMon"
 }
 [xml]$manifest = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Package.appxmanifest') -Raw
 $manifest.Package.Identity.SetAttribute('Version', $version)
-$manifest.Package.Identity.SetAttribute('Publisher', $Publisher)
+$unsignedPublisherOid = 'OID.2.25.311729368913984317654407730594956997722=1'
+$manifestPublisher = if ($UnsignedRelease) { "$Publisher, $unsignedPublisherOid" } else { $Publisher }
+$manifest.Package.Identity.SetAttribute('Publisher', $manifestPublisher)
 [xml]$providerManifest = Get-Content -LiteralPath (Join-Path $repoRoot 'Provider\Intel-PresentMon.man') -Raw
 $provider = $providerManifest.instrumentationManifest.instrumentation.events.provider
 $providerNode = $manifest.SelectSingleNode('//*[local-name()="Provider"]')
@@ -174,6 +176,10 @@ if ($EtwRegistration -eq 'Msi') {
     }
 }
 foreach ($name in @('Install.ps1', 'Msix.ps1', 'README.md')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $output }
+$identityTool = Join-Path $nativeRoot 'PresentMonMsixIdentity.exe'
+if (Test-Path -LiteralPath $identityTool -PathType Leaf) {
+    Copy-Item -LiteralPath $identityTool -Destination $output
+}
 & (Join-Path $repoRoot 'Tools\test-msix-package.ps1') -Package $package -DependencyDirectory $dependencies -EtwRegistration $EtwRegistration -RequireSccd:($EtwRegistration -eq 'Msix' -and -not $UnsignedRelease)
 & (Join-Path $repoRoot 'Tools\test-msix-validator.ps1') -Package $package -DependencyDirectory $dependencies -EtwRegistration $EtwRegistration
 $appBytes = Get-MsixPayloadBytes $package

@@ -1,6 +1,51 @@
 Set-StrictMode -Version Latest
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
+function Get-MsixIdentityTool {
+    $candidates = @()
+    if ($env:PRESENTMON_MSIX_IDENTITY_TOOL) {
+        $candidates += [IO.Path]::GetFullPath($env:PRESENTMON_MSIX_IDENTITY_TOOL)
+    }
+    $current = [IO.DirectoryInfo]::new([IO.Path]::GetFullPath($PSScriptRoot))
+    while ($current) {
+        $candidates += Join-Path $current.FullName 'PresentMonMsixIdentity.exe'
+        $candidates += Join-Path $current.FullName 'build\Release\PresentMonMsixIdentity.exe'
+        $candidates += Join-Path $current.FullName 'build\Debug\PresentMonMsixIdentity.exe'
+        $current = $current.Parent
+    }
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            return $candidate
+        }
+    }
+    throw 'PresentMonMsixIdentity.exe is missing. Build IntelPresentMon\PMInstaller\MsixIdentity.vcxproj first.'
+}
+
+function Invoke-MsixIdentity {
+    param([Parameter(Mandatory)][string[]]$Arguments)
+
+    $tool = Get-MsixIdentityTool
+    $output = @(& $tool @Arguments 2>&1)
+    if ($LASTEXITCODE -ne 0) {
+        $message = (($output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine).Trim()
+        if (-not $message) { $message = "PresentMonMsixIdentity.exe failed with exit code $LASTEXITCODE." }
+        throw $message
+    }
+    $result = (($output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine).Trim()
+    if (-not $result) { throw 'PresentMonMsixIdentity.exe returned no result.' }
+    return $result
+}
+
+function Get-MsixFamilyName {
+    param([Parameter(Mandatory)][string]$Name, [Parameter(Mandatory)][string]$Publisher)
+    return Invoke-MsixIdentity @('family-name', $Name, $Publisher)
+}
+
+function Get-MsixCertificateSignatureHash {
+    param([Parameter(Mandatory)][string]$CertificatePath)
+    return Invoke-MsixIdentity @('signature-hash', [IO.Path]::GetFullPath($CertificatePath))
+}
+
 function Read-MsixManifest {
     param([Parameter(Mandatory)][string]$Path)
     $archive = [IO.Compression.ZipFile]::OpenRead($Path)

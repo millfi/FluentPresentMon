@@ -7,8 +7,17 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot '..\IntelPresentMon\PMInstaller\Sccd.ps1')
 $certificate = [Security.Cryptography.X509Certificates.X509Certificate2]::new([IO.Path]::GetFullPath($CertificateFile))
 try {
-    $familyName = [PresentMon.Packaging.Identity]::FamilyName('Fluent.PresentMon', $certificate.Subject)
-    $hash = [PresentMon.Packaging.Identity]::CertificateSignatureHash($certificate.Handle)
+    $familyName = Get-MsixFamilyName -Name 'Fluent.PresentMon' -Publisher $certificate.Subject
+    $tempCertificate = Join-Path ([IO.Path]::GetTempPath()) ('presentmon-cert-' + [guid]::NewGuid().ToString('N') + '.cer')
+    try {
+        [IO.File]::WriteAllBytes($tempCertificate, $certificate.Export([Security.Cryptography.X509Certificates.X509ContentType]::Cert))
+        $hash = Get-MsixCertificateSignatureHash -CertificatePath $tempCertificate
+    }
+    finally {
+        if (Test-Path -LiteralPath $tempCertificate) {
+            Remove-Item -LiteralPath $tempCertificate -Force
+        }
+    }
     $output = [IO.Path]::GetFullPath($OutputDirectory)
     if (Test-Path -LiteralPath $output) { throw 'Use a new output directory to preserve existing SCCD requests.' }
     [void][IO.Directory]::CreateDirectory($output)

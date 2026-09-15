@@ -7,6 +7,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
+$unsignedPublisherOid = 'OID.2.25.311729368913984317654407730594956997722=1'
 . (Join-Path $repoRoot 'IntelPresentMon\PMInstaller\Msix.ps1')
 function Assert-Package([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "MSIX validation failed: $Message" }
@@ -45,6 +46,10 @@ $archive = [IO.Compression.ZipFile]::OpenRead($Package)
 try {
     $entries = @{}
     foreach ($entry in $archive.Entries) { $entries[$entry.FullName.Replace('\', '/')] = $entry }
+    if (-not $entries.ContainsKey('AppxSignature.p7x')) {
+        Assert-Package ($manifest.Package.Identity.Publisher -match "(?:^|,\s*)$([regex]::Escape($unsignedPublisherOid))(?:,|$)") `
+            'Unsigned packages must use the Windows unsigned publisher namespace.'
+    }
     foreach ($path in @('PresentMon.exe', 'PresentMonService.exe', 'PresentMonAPI2.dll', 'PresentMonAPI2Loader.dll', 'ddETWExternal.xml',
         'ui/PresentMonUI.exe', 'ui/PresentMonUI.pri', 'ui/App.xbf', 'ui/MainWindow.xbf', 'resources.pri', 'Assets/AppIcon.png',
         'SDK/PresentMonAPI2Loader.dll', 'SDK/PresentMonAPI2Loader.lib', 'SDK/PresentMonAPI.h',
@@ -95,7 +100,7 @@ try {
     if ($entries.ContainsKey('PresentMon.sccd')) {
         $reader = [IO.StreamReader]::new($entries['PresentMon.sccd'].Open())
         try { [xml]$descriptor = $reader.ReadToEnd() } finally { $reader.Dispose() }
-        $family = [PresentMon.Packaging.Identity]::FamilyName($manifest.Package.Identity.Name, $manifest.Package.Identity.Publisher)
+        $family = Get-MsixFamilyName -Name $manifest.Package.Identity.Name -Publisher $manifest.Package.Identity.Publisher
         try { Assert-MsixSccd -Descriptor $descriptor -FamilyName $family }
         catch { throw "MSIX validation failed: $($_.Exception.Message)" }
     }

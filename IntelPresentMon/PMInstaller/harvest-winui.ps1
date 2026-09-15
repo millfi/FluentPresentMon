@@ -67,6 +67,25 @@ function Get-StableId {
     }
 }
 
+function Get-WinUiLanguageMetadata {
+    param([string]$RelativePath)
+
+    $normalizedPath = $RelativePath.Replace('/', '\').ToLowerInvariant()
+    if ($normalizedPath -in @(
+        'microsoft.ui.xaml.dll',
+        'microsoft.ui.xaml.phone.dll',
+        'gd-gb\microsoft.ui.xaml.dll.mui',
+        'gd-gb\microsoft.ui.xaml.phone.dll.mui',
+        'mi-nz\microsoft.ui.xaml.dll.mui',
+        'mi-nz\microsoft.ui.xaml.phone.dll.mui',
+        'ug-cn\microsoft.ui.xaml.dll.mui',
+        'ug-cn\microsoft.ui.xaml.phone.dll.mui'
+    )) {
+        return '0'
+    }
+    return $null
+}
+
 $root = [IO.Path]::GetFullPath($OutputRoot).TrimEnd('\', '/')
 if (-not (Test-Path -LiteralPath $root -PathType Container)) {
     throw "WinUI output is missing: $root. Build the native PresentMonUI project for x64 with Windows App SDK self-contained deployment enabled."
@@ -163,6 +182,10 @@ foreach ($relativePath in $relativeFiles) {
     $fileNode.SetAttribute('Name', [IO.Path]::GetFileName($relativePath))
     $fileNode.SetAttribute('Source', '$(var.WinUIOutputDir)\' + $relativePath)
     $fileNode.SetAttribute('KeyPath', 'yes')
+    $language = Get-WinUiLanguageMetadata -RelativePath $relativePath
+    if ($language) {
+        $fileNode.SetAttribute('Language', $language)
+    }
     $null = $component.AppendChild($fileNode)
     $null = $componentGroup.AppendChild($component)
 }

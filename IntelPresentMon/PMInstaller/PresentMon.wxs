@@ -29,9 +29,9 @@
         
         <MediaTemplate EmbedCab="yes" />
 
-        <?define console_app_path = $(pm.GetConsoleAppPath($(var.SolutionDir), $(var.ConsoleAppVersion))) ?>
-        <?define console_app_filename = $(pm.GetConsoleAppFileName($(var.ConsoleAppVersion))) ?>
-        <?define has_console_app = $(pm.CheckFileExists($(var.console_app_path))) ?>
+        <?define console_app_path = $(var.ConsoleAppPath) ?>
+        <?define console_app_filename = $(var.ConsoleAppFilename) ?>
+        <?define has_console_app = $(var.HasConsoleApp) ?>
 
         <Feature
             Id="complete_install"

@@ -16,8 +16,10 @@ those projects are no longer part of `PresentMon.sln` or the current build.
 .\Tools\build-installer.ps1 -SkipRestore -EtwRegistration Msi -Publisher 'CN=Your Publisher' -CertificateThumbprint YOUR_THUMBPRINT -WixBin .\build\tools\wix3.14.1\bin
 ```
 
-Unsigned builds can be inspected but cannot be installed normally. Signed
-builds require an existing code-signing certificate whose subject exactly
+Unsigned builds use the Windows unsigned publisher namespace and can be
+installed on Windows 11 for local testing with `Add-AppxPackage -AllowUnsigned`
+from an administrator PowerShell. Their package identity is intentionally
+different from a signed build. Signed builds require an existing code-signing certificate whose subject exactly
 matches `Publisher`. The default store is CurrentUser\My; use
 `-CertificateStore` and `-MachineCertificateStore` for another store.
 `-TimestampUrl` enables SHA-256 RFC 3161 timestamping. Use a stable publisher
@@ -33,7 +35,8 @@ packaged UIAccess behavior must be verified on the target Windows version.
 
 Each run uses a fresh directory under `build\Release\MSIX`. The file
 `latest-package.txt` is updated only after package validation succeeds.
-Distribute the MSIX, `Dependencies`, `Install.ps1` and `Msix.ps1` together.
+Distribute the MSIX, `Dependencies`, `Install.ps1`, `Msix.ps1` and
+`PresentMonMsixIdentity.exe` together.
 In MSI provider mode also include `PresentMon_ETW_x64.msi`; it is signed with
 the same certificate as the MSIX. The per-mode pointers are
 `latest-msix-etw-package.txt` and `latest-msi-etw-package.txt`.
@@ -74,7 +77,10 @@ Prepare a request using the public certificate that will identify the publisher:
 
 The resulting `request.json`, `Publisher.cer`, and `PresentMon.request.sccd`
 are request materials, not an authorization. The signature hash is obtained
-through Windows CryptoAPI and is different from a certificate thumbprint.
+through the native `PresentMonMsixIdentity.exe` helper and Windows CryptoAPI;
+it is different from a certificate thumbprint. `build-capture-app.ps1` builds
+the helper alongside the capture binaries, and signed distributions include
+it beside `Msix.ps1` for repeatable identity checks.
 Confirm the production publisher/PFN and certificate before requesting approval
 through Microsoft support or your TAM. Obtain the issued SCCD for both capabilities,
 then supply it with `-SccdPath`. The build checks the schema, capability names,

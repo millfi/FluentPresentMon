@@ -25,11 +25,6 @@ if (-not $UnsignedRelease -and -not $CertificateThumbprint) {
     throw 'Pass -CertificateThumbprint and the matching -Publisher for a signed MSIX, or -UnsignedRelease for a validation-only package.'
 }
 if ($UnsignedRelease -and $CertificateThumbprint) { throw 'UnsignedRelease and CertificateThumbprint are mutually exclusive.' }
-if (-not $UnsignedRelease -and $EtwRegistration -eq 'Msix') {
-    . (Join-Path $repoRoot 'IntelPresentMon\PMInstaller\Sccd.ps1')
-    Assert-MsixSigningSccd -SccdPath $SccdPath -Publisher $Publisher -CertificateThumbprint $CertificateThumbprint `
-        -CertificateStore $CertificateStore -MachineCertificateStore:$MachineCertificateStore
-}
 if (-not $VisualStudioPath) {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
     $VisualStudioPath = & $vswhere -latest -products * -version '[18.7,)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath

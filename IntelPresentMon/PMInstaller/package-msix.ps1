@@ -156,7 +156,17 @@ foreach ($frameworkPath in $frameworkPaths) {
     Copy-Item -LiteralPath $frameworkPath -Destination $dependencies
 }
 $manifest.Save((Join-Path $layout 'AppxManifest.xml'))
-@{ EtwRegistration = $EtwRegistration } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $layout 'Distribution.json') -Encoding utf8
+# Use the native build identity rather than the checkout at packaging time.
+$buildId = Get-Content -LiteralPath (Join-Path $repoRoot 'IntelPresentMon\Versioning\generated\build_id.h') -Raw
+$commitMatch = [regex]::Match($buildId, '(?m)^#define PM_BID_GIT_HASH "([^"]+)"')
+$dirtyMatch = [regex]::Match($buildId, '(?m)^#define PM_BID_DIRTY (true|false)')
+if (-not $commitMatch.Success -or -not $dirtyMatch.Success) { throw 'Native build identity is missing or invalid.' }
+[ordered]@{
+    EtwRegistration = $EtwRegistration
+    Version = $version
+    CommitHash = $commitMatch.Groups[1].Value
+    SourceModified = $dirtyMatch.Groups[1].Value -eq 'true'
+} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $layout 'Distribution.json') -Encoding utf8
 $package = Join-Path $output "FluentPresentMon_${version}_x64.msix"
 $signArguments = @('sign', '/fd', 'SHA256', '/sha1', $CertificateThumbprint, '/s', $CertificateStore)
 if ($MachineCertificateStore) { $signArguments += '/sm' }

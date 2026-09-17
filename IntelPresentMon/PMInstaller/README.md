@@ -54,7 +54,9 @@ separately to decode these Intel-PresentMon events. The unused experimental
 MeasuredInput/MeasuredScreenChange handlers still use TDH and are not enabled by
 the production service. Runtime tests must use the real installed package/service.
 
-`Distribution.json` inside the signed package records the selected ETW mode.
+`Distribution.json` inside the package records the selected ETW mode, package
+version, native build commit hash, and whether the build includes uncommitted
+source changes. The commit hash comes from the generated native build identity.
 The installer reads this to distinguish `None` from `Msi`; a missing MSI cannot
 silently turn an MSI-provider build into a registration-free installation.
 

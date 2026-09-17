@@ -525,7 +525,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 		// this pointer serves as a way to set the kernel on the server exec context after the server is created
 		p2c::kern::Kernel* pKernel = nullptr;
-		// active object that creates a window and sinks raw input messages to listen for hotkey presses
+		// Dedicated thread that registers and receives global hotkeys.
 		p2c::win::Hotkeys hotkeys;
 		// The UI connects to the existing action channel.
 		const auto actName = std::format(R"(\\.\pipe\ipm-cef-channel-{})", GetCurrentProcessId());

@@ -2,54 +2,44 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include <CommonUtilities/win/WinAPI.h>
-#include <cstdint>
-#include <map>
-#include <thread>
-#include <semaphore>
-#include <functional>
-#include <mutex>
-#include <bitset>
+#include <CommonUtilities/mt/Thread.h>
 #include <Core/source/win/Key.h>
 #include <Core/source/win/ModSet.h>
-#include <CommonUtilities/mt/Thread.h>
+#include <functional>
+#include <future>
+#include <map>
+#include <semaphore>
 
 namespace p2c::win
 {
-	class Hotkeys
-	{
-	public:
-		Hotkeys();
-		Hotkeys(const Hotkeys&) = delete;
-		Hotkeys& operator=(const Hotkeys&) = delete;
-		~Hotkeys();
-		bool BindAction(int action, win::Key key, win::ModSet mods);
-		bool ClearAction(int action);
-		void SetHandler(std::function<void(int)> handler);
-	private:
-		// types
-		struct Hotkey
-		{
-		public:
-			Hotkey(win::Key key, win::ModSet mods);
-			bool operator<(const Hotkey& rhs) const;
-			bool operator==(const Hotkey& rhs) const;
-		private:
-			win::Key key;
-			win::ModSet mods;
-		};
-		// functions
-		void Kernel_() noexcept;
-		void DispatchHotkey_(int action) const;
-		win::ModSet GatherModifiers_() const;
-		// data
-		std::binary_semaphore startupSemaphore_{ 0 };
-		::pmon::util::mt::Thread thread_;
-		unsigned long threadId_{};
-		void* messageWindowHandle_ = nullptr;
-		std::bitset<win::Key::virtualKeyTableSize> pressedKeys_;
-		// control access to concurrent memory for key map / handler
-		mutable std::mutex mtx_;
-		std::function<void(int)> Handler_;
-		std::map<Hotkey, int> registeredHotkeys_;
-	};
+    class Hotkeys
+    {
+    public:
+        Hotkeys();
+        Hotkeys(const Hotkeys&) = delete;
+        Hotkeys& operator=(const Hotkeys&) = delete;
+        ~Hotkeys();
+        bool BindAction(int action, Key key, ModSet mods);
+        bool ClearAction(int action);
+        void SetHandler(std::function<void(int)> handler);
+    private:
+        struct Binding
+        {
+            int action;
+            UINT key;
+            UINT modifiers;
+        };
+        bool Invoke_(std::function<bool()> command);
+        bool ClearAction_(int action);
+        void Kernel_() noexcept;
+        static constexpr UINT commandMessage_ = WM_APP + 1;
+        std::binary_semaphore startupSemaphore_{ 0 };
+        DWORD threadId_{};
+        // Registrations and the handler are accessed only on the hotkey thread.
+        std::map<int, Binding> bindings_;
+        std::function<void(int)> handler_;
+        int nextId_ = 1;
+        // Construct last and join before any state used by the thread is destroyed.
+        ::pmon::util::mt::Thread thread_;
+    };
 }

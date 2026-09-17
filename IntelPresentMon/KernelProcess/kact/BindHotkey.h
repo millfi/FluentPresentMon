@@ -2,6 +2,7 @@
 #include "../../Interprocess/source/act/ActionHelper.h"
 #include "KernelExecutionContext.h"
 #include <format>
+#include <stdexcept>
 #include "../../Core/source/kernel/Kernel.h"
 
 #define ACT_NAME BindHotkey
@@ -40,9 +41,11 @@ namespace ACT_NS
 		friend class ACT_TYPE<ACT_NAME, ACT_EXEC_CTX>;
 		static Response Execute_(const ACT_EXEC_CTX& ctx, SessionContext& stx, Params&& in)
 		{
-			ctx.pHotkeys->BindAction(in.action,
+			if (!ctx.pHotkeys->BindAction(in.action,
 				p2c::win::Key::Code(in.combination.key),
-				p2c::win::ModSet::FromCodes(in.combination.modifiers));
+				p2c::win::ModSet::FromCodes(in.combination.modifiers))) {
+				throw std::runtime_error("Cannot register global hotkey. The shortcut may already be in use.");
+			}
 			return {};
 		}
 	};

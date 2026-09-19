@@ -3,6 +3,7 @@
 
 #include "../pch.h"
 #include "FormControls.h"
+#include "../Core/Localization.h"
 #include "../Core/UiDiagnostics.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -28,13 +29,7 @@ namespace
 {
     hstring H(const std::string& text)
     {
-        if (text.empty()) return {};
-        auto const length = (int)text.size();
-        auto const required = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, nullptr, 0);
-        if (required == 0) return {};
-        std::wstring converted((size_t)required, L'\0');
-        MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, converted.data(), required);
-        return hstring{ converted };
+        return pmon::ui::localization::Text(text);
     }
 
     std::string Hex(Color value)
@@ -42,12 +37,6 @@ namespace
         char buffer[10]{};
         sprintf_s(buffer, "#%02X%02X%02X%02X", value.A, value.R, value.G, value.B);
         return buffer;
-    }
-
-    std::string Lower(std::string text)
-    {
-        for (auto& character : text) character = (char)std::tolower((unsigned char)character);
-        return text;
     }
 
     fire_and_forget RunAsyncButton(Button button, pmon::ui::views::FormControls::AsyncCallback action, std::string id)
@@ -65,7 +54,7 @@ namespace
             message.Text(error.message());
             message.TextWrapping(TextWrapping::Wrap);
             message.MaxWidth(360);
-            AutomationProperties::SetName(message, H("Action failed: ") + error.message());
+            AutomationProperties::SetName(message, H("Action failed") + hstring(L": ") + error.message());
             auto flyout = Flyout{};
             flyout.Content(message);
             if (button.XamlRoot()) flyout.ShowAt(button);
@@ -77,7 +66,7 @@ namespace
             message.Text(H(error.what()));
             message.TextWrapping(TextWrapping::Wrap);
             message.MaxWidth(360);
-            AutomationProperties::SetName(message, H("Action failed: ") + H(error.what()));
+            AutomationProperties::SetName(message, H("Action failed") + hstring(L": ") + H(error.what()));
             auto flyout = Flyout{};
             flyout.Content(message);
             if (button.XamlRoot()) flyout.ShowAt(button);
@@ -326,7 +315,7 @@ namespace pmon::ui::views::FormControls
         button.Content(content);
         button.HorizontalAlignment(HorizontalAlignment::Left);
         Identify(button, id, name);
-        ToolTipService::SetToolTip(button, box_value(H("Choose ") + H(Lower(name))));
+        ToolTipService::SetToolTip(button, box_value(H("Choose") + hstring(L" ") + H(name)));
 
         auto flyout = Flyout{};
         auto swatchWeak = make_weak(swatch);

@@ -36,7 +36,7 @@
     <Link><SubSystem>Console</SubSystem><AdditionalDependencies>shell32.lib;ole32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies></Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core\*.cpp;Interop\*.cpp;Tests\ShellSmokeHost.cpp" />
+    <ClCompile Include="Core\*.cpp;Interop\*.cpp;Tests\ShellSmokeHost.cpp" Exclude="Core\Localization.cpp" />
     <ClInclude Include="Core\*.h;Interop\*.h;Tests\*.h" />
     <PresetFixture Include="Assets\Presets\*.json" />
     <ProtocolFixture Include="Tests\NativeFixtures\*.bin;Tests\NativeFixtures\*.json" />

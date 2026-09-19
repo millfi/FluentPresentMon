@@ -4,6 +4,7 @@
 #include "../pch.h"
 #include "HotkeyEditor.h"
 
+#include "../Core/Localization.h"
 #include "FormControls.h"
 
 #include <algorithm>
@@ -19,13 +20,7 @@ namespace
 {
     hstring H(const std::string& text)
     {
-        if (text.empty()) return {};
-        auto const length = (int)text.size();
-        auto const required = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, nullptr, 0);
-        if (required == 0) return {};
-        std::wstring converted((size_t)required, L'\0');
-        MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, converted.data(), required);
-        return hstring{ converted };
+        return pmon::ui::localization::Text(text);
     }
 
     struct KeyOption
@@ -103,18 +98,18 @@ namespace pmon::ui::views::HotkeyEditor
 {
     std::string Format(const std::optional<core::HotkeyBinding>& binding)
     {
-        if (!binding || !binding->Combination) return "Not assigned";
+        if (!binding || !binding->Combination) return to_string(pmon::ui::localization::Text("Not assigned"));
         const auto& combination = *binding->Combination;
         std::string text;
         for (const auto& modifier : Modifiers())
         {
             if (!HasModifier(combination, modifier.Code)) continue;
             if (!text.empty()) text += " + ";
-            text += modifier.Text;
+            text += to_string(pmon::ui::localization::Text(modifier.Text));
         }
         if (!text.empty()) text += " + ";
-        if (const auto* key = FindKey(combination.Key)) text += key->Text;
-        else text += "Key " + std::to_string(combination.Key);
+        if (const auto* key = FindKey(combination.Key)) text += to_string(pmon::ui::localization::Text(key->Text));
+        else text += to_string(pmon::ui::localization::Text("Key")) + " " + std::to_string(combination.Key);
         return text;
     }
 

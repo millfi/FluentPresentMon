@@ -5,6 +5,7 @@
 
 #include "../Core/ConfigModels.h"
 #include "../Core/Introspection.h"
+#include "../Core/Localization.h"
 #include "../Services/AppSession.h"
 #include "FormControls.h"
 
@@ -14,7 +15,6 @@
 #include <cctype>
 #include <cmath>
 #include <limits>
-#include <sstream>
 
 using namespace winrt;
 using namespace winrt::Microsoft::UI::Xaml;
@@ -30,7 +30,7 @@ namespace pmon::ui::views
     {
         hstring Text(const std::string& value)
         {
-            return to_hstring(value);
+            return pmon::ui::localization::Text(value);
         }
 
         bool Contains(const std::vector<int>& values, int value)
@@ -171,24 +171,24 @@ namespace pmon::ui::views
         commands.HorizontalContentAlignment(HorizontalAlignment::Left);
         commands.Background(SolidColorBrush{ Microsoft::UI::Colors::Transparent() });
         addGraph_ = AppBarButton{};
-        addGraph_.Label(L"Add graph");
+        addGraph_.Label(Text("Add graph"));
         addGraph_.Icon(SymbolIcon{ Symbol::Add });
         AutomationProperties::SetAutomationId(addGraph_, L"AddGraph");
         addGraph_.Click([this](auto const&, auto const&) { AddWidget(true); });
         addReadout_ = AppBarButton{};
-        addReadout_.Label(L"Add readout");
+        addReadout_.Label(Text("Add readout"));
         addReadout_.Icon(SymbolIcon{ Symbol::Font });
         AutomationProperties::SetAutomationId(addReadout_, L"AddReadout");
         addReadout_.Click([this](auto const&, auto const&) { AddWidget(false); });
         loadButton_ = AppBarButton{};
-        loadButton_.Label(L"Open loadout");
+        loadButton_.Label(Text("Open loadout"));
         loadButton_.Icon(SymbolIcon{ Symbol::OpenFile });
         AutomationProperties::SetAutomationId(loadButton_, L"LoadLoadout");
         loadButton_.Click([button = loadButton_, notice = notice_, load = load_](auto const&, auto const&) {
             RunCommandAsync(button, notice, "Open loadout", load);
         });
         saveButton_ = AppBarButton{};
-        saveButton_.Label(L"Save loadout");
+        saveButton_.Label(Text("Save loadout"));
         saveButton_.Icon(SymbolIcon{ Symbol::Save });
         AutomationProperties::SetAutomationId(saveButton_, L"SaveLoadout");
         saveButton_.Click([button = saveButton_, notice = notice_, save = save_](auto const&, auto const&) {
@@ -221,7 +221,7 @@ namespace pmon::ui::views
         ScrollViewer::SetHorizontalScrollMode(list_, ScrollMode::Disabled);
         ScrollViewer::SetHorizontalScrollBarVisibility(list_, ScrollBarVisibility::Disabled);
         AutomationProperties::SetAutomationId(list_, L"WidgetList");
-        AutomationProperties::SetName(list_, L"Overlay widgets. Drag to reorder, or use each widget's move buttons.");
+        AutomationProperties::SetName(list_, Text("Overlay widgets. Drag to reorder, or use each widget's move buttons."));
         list_.DragItemsStarting([this](auto const&, auto const&) { dragging_ = true; });
         list_.DragItemsCompleted([this](auto const&, auto const&) {
             dragging_ = false;
@@ -257,15 +257,17 @@ namespace pmon::ui::views
         const auto& intro = session_->Introspection();
         const auto& widgets = session_->Widgets();
         if (intro.Metrics.empty()) {
-            summary_.Text(L"Metric information is not available yet. Connect to PresentMon to edit the loadout.");
+            summary_.Text(Text("Metric information is not available yet. Connect to PresentMon to edit the loadout."));
         }
         else if (widgets.empty()) {
-            summary_.Text(L"Add a graph or readout to start your overlay.");
+            summary_.Text(Text("Add a graph or readout to start your overlay."));
         }
         else {
             const auto count = widgets.size();
-            summary_.Text(Text(std::to_string(count) + " widget" + (count == 1 ? "" : "s")
-                + " in display order. Drag cards to reorder, or use Move up and Move down."));
+            summary_.Text(pmon::ui::localization::Format(count == 1
+                ? "{0} widget in display order. Drag cards to reorder, or use Move up and Move down."
+                : "{0} widgets in display order. Drag cards to reorder, or use Move up and Move down.",
+                { std::to_string(count) }));
         }
         addGraph_.IsEnabled(editingEnabled_ && std::any_of(intro.Metrics.begin(), intro.Metrics.end(),
             [](const auto& metric) { return metric.Numeric; }));
@@ -302,7 +304,7 @@ namespace pmon::ui::views
         auto& widgets = session_->Widgets();
         const auto position = std::find(widgets.begin(), widgets.end(), widget);
         const auto index = position == widgets.end() ? 0 : (int)(position - widgets.begin()) + 1;
-        title.Text(Text(std::to_string(index) + ". " + WidgetTitle(*widget)));
+        title.Text(Text(std::to_string(index) + ". " + to_string(Text(WidgetTitle(*widget)))));
         title.FontSize(18.0);
         title.FontWeight(Microsoft::UI::Text::FontWeights::SemiBold());
         title.TextTrimming(TextTrimming::CharacterEllipsis);
@@ -365,7 +367,7 @@ namespace pmon::ui::views
         }
 
         Expander details;
-        details.Header(box_value(isGraph ? L"Graph settings" : L"Readout settings"));
+        details.Header(box_value(Text(isGraph ? "Graph settings" : "Readout settings")));
         details.HorizontalAlignment(HorizontalAlignment::Stretch);
         details.HorizontalContentAlignment(HorizontalAlignment::Stretch);
         details.IsExpanded(expandedWidgets_.contains(widget->Key));
@@ -394,11 +396,12 @@ namespace pmon::ui::views
             heading.ColumnDefinitions().Append(StarColumn());
             heading.ColumnDefinitions().Append(AutoColumn());
             TextBlock headingText;
-            headingText.Text(Text("Series " + std::to_string(lineIndex + 1)));
+            headingText.Text(pmon::ui::localization::Format("Series {0}", { std::to_string(lineIndex + 1) }));
             headingText.FontWeight(Microsoft::UI::Text::FontWeights::SemiBold());
             headingText.VerticalAlignment(VerticalAlignment::Center);
             heading.Children().Append(headingText);
-            auto remove = IconButton("RemoveSeries_" + id, "Remove series " + std::to_string(lineIndex + 1), Symbol::Remove,
+            auto remove = IconButton("RemoveSeries_" + id,
+                to_string(pmon::ui::localization::Format("Remove series {0}", { std::to_string(lineIndex + 1) })), Symbol::Remove,
                 [this, widget, lineKey] { RemoveSeries(widget, lineKey); });
             Grid::SetColumn(remove, 1);
             heading.Children().Append(remove);
@@ -412,13 +415,15 @@ namespace pmon::ui::views
         const auto selectedMetric = line->Metric;
         const auto labels = MetricNames(choices, [this, selectedMetric](const core::Metric& metric) { return MetricLabel(metric, selectedMetric); });
         AutoSuggestBox metricBox;
-        metricBox.Text(Text(current ? current->Name : "Unknown metric (" + std::to_string(line->Metric.MetricId) + ")"));
-        metricBox.PlaceholderText(L"Find a metric");
+        auto const unknownMetric = pmon::ui::localization::Format("Unknown metric ({0})", { std::to_string(line->Metric.MetricId) });
+        metricBox.Text(current ? Text(current->Name) : unknownMetric);
+        metricBox.PlaceholderText(Text("Find a metric"));
         metricBox.ItemsSource(StringItems(labels));
         metricBox.QueryIcon(SymbolIcon{ Symbol::Find });
         metricBox.HorizontalAlignment(HorizontalAlignment::Stretch);
         AutomationProperties::SetAutomationId(metricBox, Text("Metric_" + id));
-        AutomationProperties::SetName(metricBox, Text("Metric for series " + std::to_string(lineIndex + 1)));
+        AutomationProperties::SetName(metricBox,
+            pmon::ui::localization::Format("Metric for series {0}", { std::to_string(lineIndex + 1) }));
         ToolTipService::SetToolTip(metricBox, box_value(Text(current ? current->Description : "Choose a metric reported by PresentMon.")));
         metricBox.TextChanged([choices, labels](auto const& box, AutoSuggestBoxTextChangedEventArgs const& args) {
             if (args.Reason() != AutoSuggestionBoxTextChangeReason::UserInput) return;
@@ -448,7 +453,8 @@ namespace pmon::ui::views
             const auto it = std::find(labels.begin(), labels.end(), *selected);
             if (it != labels.end()) box.Text(Text((*choices[(size_t)(it - labels.begin())]).Name));
         });
-        metricBox.QuerySubmitted([this, widget, lineKey, choices, labels, currentName = current ? current->Name : "Unknown metric (" + std::to_string(line->Metric.MetricId) + ")"](
+        metricBox.QuerySubmitted([this, widget, lineKey, choices, labels,
+            currentName = current ? current->Name : to_string(unknownMetric)](
             auto const& box, AutoSuggestBoxQuerySubmittedEventArgs const& args) {
             std::optional<size_t> selected;
             if (const auto chosen = ItemText(args.ChosenSuggestion())) {
@@ -492,7 +498,7 @@ namespace pmon::ui::views
         }
         else {
             TextBlock unavailable;
-            unavailable.Text(Text("Unavailable (" + std::to_string(line->Metric.StatId) + ")"));
+            unavailable.Text(pmon::ui::localization::Format("Unavailable ({0})", { std::to_string(line->Metric.StatId) }));
             unavailable.TextWrapping(TextWrapping::Wrap);
             fields.push_back(Field("Statistic", unavailable));
         }
@@ -621,11 +627,10 @@ namespace pmon::ui::views
                         graph->GraphType.CountRange[index] = value;
                     }));
                 const auto& preferences = session_->Preferences();
-                std::ostringstream expected;
-                expected << "Expected data points: " << preferences.TimeRange << " seconds x " << preferences.MetricPollRate
-                    << " Hz = " << preferences.TimeRange * preferences.MetricPollRate
-                    << ". Change time scale in Overlay settings and poll rate in Data processing settings.";
-                panel.Children().Append(FormControls::Description(expected.str()));
+                panel.Children().Append(FormControls::Description(to_string(pmon::ui::localization::Format(
+                    "Expected data points: {0} seconds x {1} Hz = {2}. Change time scale in Overlay settings and poll rate in Data processing settings.",
+                    { std::to_string(preferences.TimeRange), std::to_string(preferences.MetricPollRate),
+                        std::to_string(preferences.TimeRange * preferences.MetricPollRate) }))));
             }
             panel.Children().Append(FormControls::Heading("Style"));
             panel.Children().Append(NumberSetting("GraphHeight_" + std::to_string(widget->Key), "Graph height",

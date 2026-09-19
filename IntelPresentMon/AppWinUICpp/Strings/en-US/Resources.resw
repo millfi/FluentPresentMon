@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle.Text" xml:space="preserve"><value>Fluent PresentMon</value></data>
+  <data name="AppTitle.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="Navigation.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="PageContent.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="NavOverview.Content" xml:space="preserve"><value>Overview</value></data>
+  <data name="NavLoadout.Content" xml:space="preserve"><value>Loadout</value></data>
+  <data name="NavSettings.Content" xml:space="preserve"><value>Settings</value></data>
+  <data name="NavOverlay.Content" xml:space="preserve"><value>Overlay</value></data>
+  <data name="NavData.Content" xml:space="preserve"><value>Data processing</value></data>
+  <data name="NavCapture.Content" xml:space="preserve"><value>Capture</value></data>
+  <data name="NavLogging.Content" xml:space="preserve"><value>Logging</value></data>
+  <data name="NavOther.Content" xml:space="preserve"><value>Other</value></data>
+  <data name="NavAbout.Content" xml:space="preserve"><value>About</value></data>
+  <data name="AppearanceLabel.Text" xml:space="preserve"><value>Appearance</value></data>
+  <data name="AppearanceSelector.AutomationProperties.Name" xml:space="preserve"><value>Appearance</value></data>
+  <data name="AppearanceSystem.Content" xml:space="preserve"><value>System</value></data>
+  <data name="AppearanceLight.Content" xml:space="preserve"><value>Light</value></data>
+  <data name="AppearanceDark.Content" xml:space="preserve"><value>Dark</value></data>
+  <data name="PageTitle.Text" xml:space="preserve"><value>Overview</value></data>
+  <data name="ProcessStatus.Text" xml:space="preserve"><value>No application selected</value></data>
+  <data name="ProcessStatus.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="CaptureStatus.Text" xml:space="preserve"><value>Capture: idle</value></data>
+  <data name="CaptureStatus.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="OverlayStatus.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="RateStatus.FontFamily" xml:space="preserve"><value>Segoe UI</value></data>
+  <data name="Loading.AutomationProperties.Name" xml:space="preserve"><value>Loading PresentMon</value></data>
+  <data name="Overlay" xml:space="preserve"><value>Overlay</value></data>
+  <data name="PresentMon_connection" xml:space="preserve"><value>PresentMon connection</value></data>
+  <data name="Connecting" xml:space="preserve"><value>Connecting</value></data>
+  <data name="Process" xml:space="preserve"><value>Process</value></data>
+  <data name="No_application_selected" xml:space="preserve"><value>No application selected</value></data>
+  <data name="Capture__recording" xml:space="preserve"><value>Capture: recording</value></data>
+  <data name="Capture__idle" xml:space="preserve"><value>Capture: idle</value></data>
+  <data name="hidden" xml:space="preserve"><value>hidden</value></data>
+  <data name="shown" xml:space="preserve"><value>shown</value></data>
+  <data name="Auto_hide" xml:space="preserve"><value>Auto-hide</value></data>
+  <data name="StatusOn" xml:space="preserve"><value>on</value></data>
+  <data name="StatusOff" xml:space="preserve"><value>off</value></data>
+  <data name="Poll" xml:space="preserve"><value>Poll</value></data>
+  <data name="Draw" xml:space="preserve"><value>Draw</value></data>
+  <data name="PresentMon" xml:space="preserve"><value>PresentMon</value></data>
+  <data name="PresentMon_loadout" xml:space="preserve"><value>PresentMon loadout</value></data>
+  <data name="Toggle_ETL_logging" xml:space="preserve"><value>Toggle ETL logging</value></data>
+  <data name="Unable_to_finish_shutdown" xml:space="preserve"><value>Unable to finish shutdown</value></data>
+  <data name="Application" xml:space="preserve"><value>Application</value></data>
+  <data name="Build" xml:space="preserve"><value>Build</value></data>
+  <data name="Service" xml:space="preserve"><value>Service</value></data>
+  <data name="Runtime" xml:space="preserve"><value>Runtime</value></data>
+
+  <data name="Overview" xml:space="preserve"><value>Overview</value></data>
+  <data name="Loadout" xml:space="preserve"><value>Loadout</value></data>
+  <data name="Data_processing" xml:space="preserve"><value>Data processing</value></data>
+  <data name="Logging" xml:space="preserve"><value>Logging</value></data>
+  <data name="Other" xml:space="preserve"><value>Other</value></data>
+  <data name="About" xml:space="preserve"><value>About</value></data>
+  <data name="Choose_an_application__configure_the_overlay__and_capture_performance_data_" xml:space="preserve"><value>Choose an application, configure the overlay, and capture performance data.</value></data>
+  <data name="Build_your_custom_overlay_with_graphs_and_readouts__Changes_are_saved_automatically_" xml:space="preserve"><value>Build your custom overlay with graphs and readouts. Changes are saved automatically.</value></data>
+  <data name="Control_where_the_overlay_appears_and_how_it_looks_" xml:space="preserve"><value>Control where the overlay appears and how it looks.</value></data>
+  <data name="Configure_sampling__timing__and_device_selection_" xml:space="preserve"><value>Configure sampling, timing, and device selection.</value></data>
+  <data name="Choose_how_performance_data_is_recorded_" xml:space="preserve"><value>Choose how performance data is recorded.</value></data>
+  <data name="Access_diagnostic_logs_and_tracing_options_" xml:space="preserve"><value>Access diagnostic logs and tracing options.</value></data>
+  <data name="Manage_shortcuts__targeting__and_application_preferences_" xml:space="preserve"><value>Manage shortcuts, targeting, and application preferences.</value></data>
+  <data name="Application__service__and_build_information_" xml:space="preserve"><value>Application, service, and build information.</value></data>
+
+  <data name="Start_capture" xml:space="preserve"><value>Start capture</value></data>
+  <data name="Stop_capture" xml:space="preserve"><value>Stop capture</value></data>
+  <data name="Refresh_processes" xml:space="preserve"><value>Refresh processes</value></data>
+  <data name="Clear_target" xml:space="preserve"><value>Clear target</value></data>
+  <data name="Search_running_applications_by_name__window__or_PID" xml:space="preserve"><value>Search running applications by name, window, or PID</value></data>
+  <data name="Select_an_application_from_the_search_results_" xml:space="preserve"><value>Select an application from the search results.</value></data>
+  <data name="Target_application" xml:space="preserve"><value>Target application</value></data>
+  <data name="The_selected_process_supplies_the_overlay_and_capture_data_" xml:space="preserve"><value>The selected process supplies the overlay and capture data.</value></data>
+  <data name="Automatic_application_selection" xml:space="preserve"><value>Automatic application selection</value></data>
+  <data name="Automatic_targeting" xml:space="preserve"><value>Automatic targeting</value></data>
+  <data name="Every_second__select_the_highest_load_application_whose_last_10_raw_GPU_Busy_samples_contain_a_change__Switching_targets_stops_an_active_capture_" xml:space="preserve"><value>Every second, select the highest-load application whose last 10 raw GPU Busy samples contain a change. Switching targets stops an active capture.</value></data>
+  <data name="Show_overlay" xml:space="preserve"><value>Show overlay</value></data>
+  <data name="Display_the_configured_widgets_over_the_target_application_" xml:space="preserve"><value>Display the configured widgets over the target application.</value></data>
+  <data name="Basic" xml:space="preserve"><value>Basic</value></data>
+  <data name="Game_experience" xml:space="preserve"><value>Game experience</value></data>
+  <data name="GPU_focus" xml:space="preserve"><value>GPU focus</value></data>
+  <data name="Power_and_temperature" xml:space="preserve"><value>Power and temperature</value></data>
+  <data name="Custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="Overlay_loadout" xml:space="preserve"><value>Overlay loadout</value></data>
+  <data name="Overlay_preset" xml:space="preserve"><value>Overlay preset</value></data>
+  <data name="Edit_custom_loadout" xml:space="preserve"><value>Edit custom loadout</value></data>
+  <data name="Preset" xml:space="preserve"><value>Preset</value></data>
+  <data name="Start_with_a_built_in_preset_or_edit_the_custom_overlay_loadout_" xml:space="preserve"><value>Start with a built-in preset or edit the custom overlay loadout.</value></data>
+  <data name="Capture" xml:space="preserve"><value>Capture</value></data>
+  <data name="Capture_duration_in_seconds" xml:space="preserve"><value>Capture duration in seconds</value></data>
+  <data name="Limit_capture_duration" xml:space="preserve"><value>Limit capture duration</value></data>
+  <data name="Capture_duration" xml:space="preserve"><value>Capture duration</value></data>
+  <data name="Stop_recording_automatically_after_this_many_seconds_" xml:space="preserve"><value>Stop recording automatically after this many seconds.</value></data>
+  <data name="Capture_directory" xml:space="preserve"><value>Capture directory</value></data>
+  <data name="Open_capture_folder" xml:space="preserve"><value>Open capture folder</value></data>
+  <data name="Performance_captures_are_saved_in_this_folder_" xml:space="preserve"><value>Performance captures are saved in this folder.</value></data>
+  <data name="Hotkeys" xml:space="preserve"><value>Hotkeys</value></data>
+  <data name="Start_or_stop_capture" xml:space="preserve"><value>Start or stop capture</value></data>
+  <data name="Show_or_hide_overlay" xml:space="preserve"><value>Show or hide overlay</value></data>
+  <data name="Cycle_overlay_preset" xml:space="preserve"><value>Cycle overlay preset</value></data>
+  <data name="Select_to_change_or_clear_this_global_keyboard_shortcut_" xml:space="preserve"><value>Select to change or clear this global keyboard shortcut.</value></data>
+
+  <data name="Action_failed" xml:space="preserve"><value>Action failed</value></data>
+  <data name="Choose" xml:space="preserve"><value>Choose</value></data>
+  <data name="On" xml:space="preserve"><value>On</value></data>
+  <data name="Off" xml:space="preserve"><value>Off</value></data>
+  <data name="None_available" xml:space="preserve"><value>None available</value></data>
+  <data name="Select_an_option" xml:space="preserve"><value>Select an option</value></data>
+  <data name="Loading_PresentMon" xml:space="preserve"><value>Loading PresentMon</value></data>
+
+  <data name="Key" xml:space="preserve"><value>Key</value></data>
+  <data name="Choose_a_key" xml:space="preserve"><value>Choose a key</value></data>
+  <data name="Choose_a_key_and_optional_modifiers_for_this_shortcut_" xml:space="preserve"><value>Choose a key and optional modifiers for this shortcut.</value></data>
+  <data name="Modifiers" xml:space="preserve"><value>Modifiers</value></data>
+  <data name="Shortcut" xml:space="preserve"><value>Shortcut</value></data>
+  <data name="Edit_hotkey" xml:space="preserve"><value>Edit hotkey</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Not_assigned" xml:space="preserve"><value>Not assigned</value></data>
+  <data name="Hotkey_action" xml:space="preserve"><value>Hotkey action</value></data>
+  <data name="Choose_a_hotkey" xml:space="preserve"><value>Choose a hotkey</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+
+  <data name="Changes_apply_to_the_active_overlay_and_are_saved_automatically_" xml:space="preserve"><value>Changes apply to the active overlay and are saved automatically.</value></data>
+  <data name="Windowed_mode" xml:space="preserve"><value>Windowed mode</value></data>
+  <data name="Display_widgets_in_a_standalone_window_instead_of_an_overlay_following_the_target_application_" xml:space="preserve"><value>Display widgets in a standalone window instead of an overlay following the target application.</value></data>
+  <data name="Automatic_hide" xml:space="preserve"><value>Automatic hide</value></data>
+  <data name="Automatically_hide_the_overlay_while_a_capture_is_running_" xml:space="preserve"><value>Automatically hide the overlay while a capture is running.</value></data>
+  <data name="Position" xml:space="preserve"><value>Position</value></data>
+  <data name="Choose_the_corner_of_the_target_window_for_the_overlay_" xml:space="preserve"><value>Choose the corner of the target window for the overlay.</value></data>
+  <data name="Top_left" xml:space="preserve"><value>Top left</value></data>
+  <data name="Top_right" xml:space="preserve"><value>Top right</value></data>
+  <data name="Bottom_left" xml:space="preserve"><value>Bottom left</value></data>
+  <data name="Bottom_right" xml:space="preserve"><value>Bottom right</value></data>
+  <data name="Width" xml:space="preserve"><value>Width</value></data>
+  <data name="Width_of_the_overlay_in_pixels__Its_content_determines_its_height_" xml:space="preserve"><value>Width of the overlay in pixels. Its content determines its height.</value></data>
+  <data name="Time_scale" xml:space="preserve"><value>Time scale</value></data>
+  <data name="Range_of_time_shown_on_graph_axes__in_seconds__This_controls_scrolling_speed_" xml:space="preserve"><value>Range of time shown on graph axes, in seconds. This controls scrolling speed.</value></data>
+  <data name="Graphics_scaling_factor" xml:space="preserve"><value>Graphics scaling factor</value></data>
+  <data name="Graphics_scaling" xml:space="preserve"><value>Graphics scaling</value></data>
+  <data name="Enlarge_overlay_graphics_for_readability_on_high_DPI_displays__Factor_ranges_from_1_to_5_" xml:space="preserve"><value>Enlarge overlay graphics for readability on high DPI displays. Factor ranges from 1 to 5.</value></data>
+  <data name="Draw_rate" xml:space="preserve"><value>Draw rate</value></data>
+  <data name="Number_of_times_the_overlay_is_drawn_per_second__FPS__" xml:space="preserve"><value>Number of times the overlay is drawn per second (FPS).</value></data>
+  <data name="Background_color" xml:space="preserve"><value>Background color</value></data>
+  <data name="Background_color_and_opacity_of_the_entire_overlay_" xml:space="preserve"><value>Background color and opacity of the entire overlay.</value></data>
+  <data name="Advanced_layout" xml:space="preserve"><value>Advanced layout</value></data>
+  <data name="Developer_settings_for_overlay_spacing_and_typography" xml:space="preserve"><value>Developer settings for overlay spacing and typography</value></data>
+  <data name="Overlay_margin" xml:space="preserve"><value>Overlay margin</value></data>
+  <data name="Outer_spacing_around_the_overlay__in_pixels_" xml:space="preserve"><value>Outer spacing around the overlay, in pixels.</value></data>
+  <data name="Overlay_border" xml:space="preserve"><value>Overlay border</value></data>
+  <data name="Thickness_of_the_overlay_border__in_pixels_" xml:space="preserve"><value>Thickness of the overlay border, in pixels.</value></data>
+  <data name="Overlay_padding" xml:space="preserve"><value>Overlay padding</value></data>
+  <data name="Space_between_the_overlay_edge_and_its_widgets__in_pixels_" xml:space="preserve"><value>Space between the overlay edge and its widgets, in pixels.</value></data>
+  <data name="Overlay_border_color" xml:space="preserve"><value>Overlay border color</value></data>
+  <data name="Color_and_opacity_of_the_overlay_border_" xml:space="preserve"><value>Color and opacity of the overlay border.</value></data>
+  <data name="Graph_margin" xml:space="preserve"><value>Graph margin</value></data>
+  <data name="Outer_spacing_around_each_graph__in_pixels_" xml:space="preserve"><value>Outer spacing around each graph, in pixels.</value></data>
+  <data name="Graph_border" xml:space="preserve"><value>Graph border</value></data>
+  <data name="Thickness_of_graph_borders__in_pixels_" xml:space="preserve"><value>Thickness of graph borders, in pixels.</value></data>
+  <data name="Graph_padding" xml:space="preserve"><value>Graph padding</value></data>
+  <data name="Space_inside_each_graph__in_pixels_" xml:space="preserve"><value>Space inside each graph, in pixels.</value></data>
+  <data name="Graph_axis_font" xml:space="preserve"><value>Graph axis font</value></data>
+  <data name="Font_family_for_graph_axis_labels__A_font_name_is_required_" xml:space="preserve"><value>Font family for graph axis labels. A font name is required.</value></data>
+  <data name="Graph_axis_text_size" xml:space="preserve"><value>Graph axis text size</value></data>
+  <data name="Size_of_graph_axis_labels__in_pixels_" xml:space="preserve"><value>Size of graph axis labels, in pixels.</value></data>
+
+  <data name="Polling_cadence" xml:space="preserve"><value>Polling cadence</value></data>
+  <data name="Polling_cadence_recommendation" xml:space="preserve"><value>Polling cadence recommendation</value></data>
+  <data name="Polling_rate" xml:space="preserve"><value>Polling rate</value></data>
+  <data name="Polling_rate_in_hertz" xml:space="preserve"><value>Polling rate in hertz</value></data>
+  <data name="How_often_to_request_metric_data_from_the_API__in_hertz__This_sets_the_temporal_resolution_of_graphs_and_readouts_" xml:space="preserve"><value>How often to request metric data from the API, in hertz. This sets the temporal resolution of graphs and readouts.</value></data>
+  <data name="Telemetry_period" xml:space="preserve"><value>Telemetry period</value></data>
+  <data name="Time_between_service_power_telemetry_requests__in_milliseconds__This_affects_metrics_such_as_GPU_power_and_temperature_" xml:space="preserve"><value>Time between service power telemetry requests, in milliseconds. This affects metrics such as GPU power and temperature.</value></data>
+  <data name="Statistics_window" xml:space="preserve"><value>Statistics window</value></data>
+  <data name="Sliding_sample_window_for_statistics_such_as_averages_and_percentiles__in_milliseconds_" xml:space="preserve"><value>Sliding sample window for statistics such as averages and percentiles, in milliseconds.</value></data>
+  <data name="Per_metric_device_selection" xml:space="preserve"><value>Per-metric device selection</value></data>
+  <data name="Show_GPU_selectors_for_individual_loadout_metrics_to_track_multiple_GPUs__When_off__every_GPU_metric_uses_the_default_adapter_" xml:space="preserve"><value>Show GPU selectors for individual loadout metrics to track multiple GPUs. When off, every GPU metric uses the default adapter.</value></data>
+  <data name="Default_graphics_adapter" xml:space="preserve"><value>Default graphics adapter</value></data>
+  <data name="Default_adapter" xml:space="preserve"><value>Default adapter</value></data>
+  <data name="No_graphics_adapters_are_currently_available__Connect_to_the_PresentMon_service_to_enumerate_devices_" xml:space="preserve"><value>No graphics adapters are currently available. Connect to the PresentMon service to enumerate devices.</value></data>
+  <data name="GPU_used_for_new_loadout_rows__frame_queries__and_metrics_that_follow_the_global_adapter_" xml:space="preserve"><value>GPU used for new loadout rows, frame queries, and metrics that follow the global adapter.</value></data>
+  <data name="ETW_manual_flush_period_in_milliseconds" xml:space="preserve"><value>ETW manual flush period in milliseconds</value></data>
+  <data name="Manual_ETW_flush" xml:space="preserve"><value>Manual ETW flush</value></data>
+  <data name="Flush_ETW_buffers_manually_instead_of_relying_on_the_default_1_000_ms_timer__A_service_restart_may_be_required_" xml:space="preserve"><value>Flush ETW buffers manually instead of relying on the default 1,000 ms timer. A service restart may be required.</value></data>
+  <data name="ETW_flush_period" xml:space="preserve"><value>ETW flush period</value></data>
+  <data name="Time_between_manual_flushes__in_milliseconds__The_metric_window_offset_should_roughly_match_this_period_" xml:space="preserve"><value>Time between manual flushes, in milliseconds. The metric window offset should roughly match this period.</value></data>
+  <data name="Metric_window_offset" xml:space="preserve"><value>Metric window offset</value></data>
+  <data name="Offset_the_sliding_window__in_milliseconds__to_avoid_including_frames_whose_data_has_not_arrived_yet_" xml:space="preserve"><value>Offset the sliding window, in milliseconds, to avoid including frames whose data has not arrived yet.</value></data>
+  <data name="Advanced_data_settings" xml:space="preserve"><value>Advanced data settings</value></data>
+  <data name="Developer_controls_for_ETW_buffering_and_metric_timing" xml:space="preserve"><value>Developer controls for ETW buffering and metric timing</value></data>
+
+  <data name="Summary_statistics" xml:space="preserve"><value>Summary statistics</value></data>
+  <data name="Generate_a_file_summarizing_statistics_over_the_entire_capture_run_" xml:space="preserve"><value>Generate a file summarizing statistics over the entire capture run.</value></data>
+  <data name="Target_blocklist" xml:space="preserve"><value>Target blocklist</value></data>
+  <data name="Filter_common_applications_that_do_not_render_real_time_graphics_out_of_the_target_process_list_" xml:space="preserve"><value>Filter common applications that do not render real-time graphics out of the target process list.</value></data>
+  <data name="Capture_hotkeys" xml:space="preserve"><value>Capture hotkeys</value></data>
+  <data name="Configure_keyboard_shortcuts_for_starting_a_capture__showing_the_overlay__and_cycling_presets_" xml:space="preserve"><value>Configure keyboard shortcuts for starting a capture, showing the overlay, and cycling presets.</value></data>
+  <data name="Capture_folder" xml:space="preserve"><value>Capture folder</value></data>
+  <data name="Open_the_folder_containing_captured_metric_data_and_summary_statistics_" xml:space="preserve"><value>Open the folder containing captured metric data and summary statistics.</value></data>
+  <data name="Open_in_Explorer" xml:space="preserve"><value>Open in Explorer</value></data>
+  <data name="ETL_capture_is_currently_disabled" xml:space="preserve"><value>ETL capture is currently disabled</value></data>
+  <data name="Raw_ETL_recording_and_its_shortcut_are_unavailable_in_this_version__Existing_trace_files_remain_accessible_" xml:space="preserve"><value>Raw ETL recording and its shortcut are unavailable in this version. Existing trace files remain accessible.</value></data>
+  <data name="Unavailable" xml:space="preserve"><value>Unavailable</value></data>
+  <data name="ETL_capture_hotkey_is_unavailable" xml:space="preserve"><value>ETL capture hotkey is unavailable</value></data>
+  <data name="ETL_capture_hotkey" xml:space="preserve"><value>ETL capture hotkey</value></data>
+  <data name="Keyboard_shortcut_for_starting_or_finishing_an_ETL_trace_" xml:space="preserve"><value>Keyboard shortcut for starting or finishing an ETL trace.</value></data>
+  <data name="ETL_disabled" xml:space="preserve"><value>ETL disabled</value></data>
+  <data name="ETL_capture_is_disabled" xml:space="preserve"><value>ETL capture is disabled</value></data>
+  <data name="Capture_ETL" xml:space="preserve"><value>Capture ETL</value></data>
+  <data name="Raw_ETL_capture_is_currently_disabled_" xml:space="preserve"><value>Raw ETL capture is currently disabled.</value></data>
+  <data name="ETL_folder" xml:space="preserve"><value>ETL folder</value></data>
+  <data name="Open_the_folder_containing_captured__etl_trace_files_" xml:space="preserve"><value>Open the folder containing captured .etl trace files.</value></data>
+  <data name="Application_logs" xml:space="preserve"><value>Application logs</value></data>
+  <data name="Open_the_folder_containing_PresentMon_diagnostic_logs_" xml:space="preserve"><value>Open the folder containing PresentMon diagnostic logs.</value></data>
+  <data name="Keyboard_shortcuts" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="Customize_shortcuts_for_capture__overlay_visibility__and_preset_selection_" xml:space="preserve"><value>Customize shortcuts for capture, overlay visibility, and preset selection.</value></data>
+  <data name="Open_blocklist" xml:space="preserve"><value>Open blocklist</value></data>
+  <data name="Open_the_blocklist_file_used_to_filter_common_applications_from_the_target_selector__Enable_or_disable_filtering_in_Capture_settings_" xml:space="preserve"><value>Open the blocklist file used to filter common applications from the target selector. Enable or disable filtering in Capture settings.</value></data>
+  <data name="Reset_preferences" xml:space="preserve"><value>Reset preferences</value></data>
+  <data name="Restore_preferences_and_keyboard_shortcuts_to_their_defaults__A_confirmation_is_required_before_resetting_" xml:space="preserve"><value>Restore preferences and keyboard shortcuts to their defaults. A confirmation is required before resetting.</value></data>
+  <data name="Reset_preferences_" xml:space="preserve"><value>Reset preferences?</value></data>
+  <data name="All_current_preferences_and_keyboard_shortcuts_will_be_replaced_with_their_default_values_" xml:space="preserve"><value>All current preferences and keyboard shortcuts will be replaced with their default values.</value></data>
+  <data name="Confirm_preference_reset" xml:space="preserve"><value>Confirm preference reset</value></data>
+  <data name="PresentMon_performance_monitoring__powered_by_a_native_WinUI_3_interface_" xml:space="preserve"><value>PresentMon performance monitoring, powered by a native WinUI 3 interface.</value></data>
+  <data name="WinUI_3___Windows_App_SDK" xml:space="preserve"><value>WinUI 3 / Windows App SDK</value></data>
+  <data name="Interface" xml:space="preserve"><value>Interface</value></data>
+  <data name="Native_Windows_controls_with_keyboard_and_screen_reader_support_" xml:space="preserve"><value>Native Windows controls with keyboard and screen reader support.</value></data>
+  <data name="Not_available" xml:space="preserve"><value>Not available</value></data>
+  <data name="Application_information_is_unavailable" xml:space="preserve"><value>Application information is unavailable</value></data>
+  <data name="Build_and_service_information_will_appear_once_the_application_has_connected_" xml:space="preserve"><value>Build and service information will appear once the application has connected.</value></data>
+
+  <data name="Add_graph" xml:space="preserve"><value>Add graph</value></data>
+  <data name="Add_readout" xml:space="preserve"><value>Add readout</value></data>
+  <data name="Open_loadout" xml:space="preserve"><value>Open loadout</value></data>
+  <data name="Save_loadout" xml:space="preserve"><value>Save loadout</value></data>
+  <data name="Metric_information_is_not_available_yet__Connect_to_PresentMon_to_edit_the_loadout_" xml:space="preserve"><value>Metric information is not available yet. Connect to PresentMon to edit the loadout.</value></data>
+  <data name="Add_a_graph_or_readout_to_start_your_overlay_" xml:space="preserve"><value>Add a graph or readout to start your overlay.</value></data>
+  <data name="_0__widget_in_display_order__Drag_cards_to_reorder__or_use_Move_up_and_Move_down_" xml:space="preserve"><value>{0} widget in display order. Drag cards to reorder, or use Move up and Move down.</value></data>
+  <data name="_0__widgets_in_display_order__Drag_cards_to_reorder__or_use_Move_up_and_Move_down_" xml:space="preserve"><value>{0} widgets in display order. Drag cards to reorder, or use Move up and Move down.</value></data>
+  <data name="Overlay_widgets__Drag_to_reorder__or_use_each_widget_s_move_buttons_" xml:space="preserve"><value>Overlay widgets. Drag to reorder, or use each widget's move buttons.</value></data>
+  <data name="Move_widget_up" xml:space="preserve"><value>Move widget up</value></data>
+  <data name="Move_widget_down" xml:space="preserve"><value>Move widget down</value></data>
+  <data name="Remove_widget" xml:space="preserve"><value>Remove widget</value></data>
+  <data name="Readout" xml:space="preserve"><value>Readout</value></data>
+  <data name="Graph" xml:space="preserve"><value>Graph</value></data>
+  <data name="Widget_type" xml:space="preserve"><value>Widget type</value></data>
+  <data name="Graph_type" xml:space="preserve"><value>Graph type</value></data>
+  <data name="Line" xml:space="preserve"><value>Line</value></data>
+  <data name="Histogram" xml:space="preserve"><value>Histogram</value></data>
+  <data name="Add_metric_series" xml:space="preserve"><value>Add metric series</value></data>
+  <data name="Graph_settings" xml:space="preserve"><value>Graph settings</value></data>
+  <data name="Readout_settings" xml:space="preserve"><value>Readout settings</value></data>
+  <data name="Series__0_" xml:space="preserve"><value>Series {0}</value></data>
+  <data name="Remove_series__0_" xml:space="preserve"><value>Remove series {0}</value></data>
+  <data name="Find_a_metric" xml:space="preserve"><value>Find a metric</value></data>
+  <data name="Metric_for_series__0_" xml:space="preserve"><value>Metric for series {0}</value></data>
+  <data name="Choose_a_metric_reported_by_PresentMon_" xml:space="preserve"><value>Choose a metric reported by PresentMon.</value></data>
+  <data name="Metric" xml:space="preserve"><value>Metric</value></data>
+  <data name="Statistic" xml:space="preserve"><value>Statistic</value></data>
+  <data name="Unavailable___0__" xml:space="preserve"><value>Unavailable ({0})</value></data>
+  <data name="Unknown_GPU" xml:space="preserve"><value>Unknown GPU</value></data>
+  <data name="GPU_device" xml:space="preserve"><value>GPU device</value></data>
+  <data name="Array_index" xml:space="preserve"><value>Array index</value></data>
+  <data name="This_metric_is_unavailable_" xml:space="preserve"><value>This metric is unavailable.</value></data>
+  <data name="Right_axis" xml:space="preserve"><value>Right axis</value></data>
+  <data name="Use_right_axis" xml:space="preserve"><value>Use right axis</value></data>
+  <data name="Line_color" xml:space="preserve"><value>Line color</value></data>
+  <data name="Fill_color" xml:space="preserve"><value>Fill color</value></data>
+  <data name="Histogram_data" xml:space="preserve"><value>Histogram data</value></data>
+  <data name="Graph_axes" xml:space="preserve"><value>Graph axes</value></data>
+  <data name="Value_range" xml:space="preserve"><value>Value range</value></data>
+  <data name="Left_value_range" xml:space="preserve"><value>Left value range</value></data>
+  <data name="Right_value_range" xml:space="preserve"><value>Right value range</value></data>
+  <data name="Automatically_scale_the_range__or_enter_the_minimum_and_maximum_values_" xml:space="preserve"><value>Automatically scale the range, or enter the minimum and maximum values.</value></data>
+  <data name="Range_for_metric_series_assigned_to_the_right_axis_" xml:space="preserve"><value>Range for metric series assigned to the right axis.</value></data>
+  <data name="Bottom_axis" xml:space="preserve"><value>Bottom axis</value></data>
+  <data name="Show_the_time_axis_along_the_bottom_of_this_graph_" xml:space="preserve"><value>Show the time axis along the bottom of this graph.</value></data>
+  <data name="Show_bottom_axis" xml:space="preserve"><value>Show bottom axis</value></data>
+  <data name="Number_of_bins" xml:space="preserve"><value>Number of bins</value></data>
+  <data name="Number_of_bars_in_the_histogram_" xml:space="preserve"><value>Number of bars in the histogram.</value></data>
+  <data name="Count_range" xml:space="preserve"><value>Count range</value></data>
+  <data name="Range_of_counts_displayed_in_each_bin_" xml:space="preserve"><value>Range of counts displayed in each bin.</value></data>
+  <data name="Expected_data_points___0__seconds_x__1__Hz____2___Change_time_scale_in_Overlay_settings_and_poll_rate_in_Data_processing_settings_" xml:space="preserve"><value>Expected data points: {0} seconds x {1} Hz = {2}. Change time scale in Overlay settings and poll rate in Data processing settings.</value></data>
+  <data name="Style" xml:space="preserve"><value>Style</value></data>
+  <data name="Graph_height" xml:space="preserve"><value>Graph height</value></data>
+  <data name="Vertical_size_of_this_graph_in_pixels_" xml:space="preserve"><value>Vertical size of this graph in pixels.</value></data>
+  <data name="Vertical_divisions" xml:space="preserve"><value>Vertical divisions</value></data>
+  <data name="Number_of_vertical_divisions_in_the_grid_" xml:space="preserve"><value>Number of vertical divisions in the grid.</value></data>
+  <data name="Horizontal_divisions" xml:space="preserve"><value>Horizontal divisions</value></data>
+  <data name="Number_of_horizontal_divisions_in_the_grid_" xml:space="preserve"><value>Number of horizontal divisions in the grid.</value></data>
+  <data name="Font_size" xml:space="preserve"><value>Font size</value></data>
+  <data name="Text_size_for_this_graph_" xml:space="preserve"><value>Text size for this graph.</value></data>
+  <data name="Text_size_for_this_readout_" xml:space="preserve"><value>Text size for this readout.</value></data>
+  <data name="Grid_color" xml:space="preserve"><value>Grid color</value></data>
+  <data name="Text_color" xml:space="preserve"><value>Text color</value></data>
+  <data name="Divider_color" xml:space="preserve"><value>Divider color</value></data>
+  <data name="Border_color" xml:space="preserve"><value>Border color</value></data>
+  <data name="Show_label" xml:space="preserve"><value>Show label</value></data>
+  <data name="Display_the_metric_name_next_to_its_value_" xml:space="preserve"><value>Display the metric name next to its value.</value></data>
+  <data name="Metric_labels" xml:space="preserve"><value>Metric labels</value></data>
+  <data name="Device_ID" xml:space="preserve"><value>Device ID</value></data>
+  <data name="Include_the_GPU_device_ID_in_metric_labels_" xml:space="preserve"><value>Include the GPU device ID in metric labels.</value></data>
+  <data name="Include_device_ID" xml:space="preserve"><value>Include device ID</value></data>
+  <data name="Device_name" xml:space="preserve"><value>Device name</value></data>
+  <data name="Include_the_GPU_name_in_metric_labels_" xml:space="preserve"><value>Include the GPU name in metric labels.</value></data>
+  <data name="Include_device_name" xml:space="preserve"><value>Include device name</value></data>
+  <data name="Minimum" xml:space="preserve"><value>Minimum</value></data>
+  <data name="Maximum" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Autoscale" xml:space="preserve"><value>Autoscale</value></data>
+</root>

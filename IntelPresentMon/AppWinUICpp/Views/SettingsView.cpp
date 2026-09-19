@@ -5,6 +5,7 @@
 #include "SettingsView.h"
 
 #include "../Core/ConfigModels.h"
+#include "../Core/Localization.h"
 #include "FormControls.h"
 
 #include <cmath>
@@ -21,13 +22,7 @@ namespace
 {
     hstring H(const std::string& text)
     {
-        if (text.empty()) return {};
-        auto const length = (int)text.size();
-        auto const required = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, nullptr, 0);
-        if (required == 0) return {};
-        std::wstring converted((size_t)required, L'\0');
-        MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, converted.data(), required);
-        return hstring{ converted };
+        return pmon::ui::localization::Text(text);
     }
 
     std::string NormalizeKey(std::string text)

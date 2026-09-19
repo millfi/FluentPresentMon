@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle.Text" xml:space="preserve"><value>Fluent PresentMon</value></data>
+  <data name="AppTitle.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="Navigation.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="PageContent.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="NavOverview.Content" xml:space="preserve"><value>概要</value></data>
+  <data name="NavLoadout.Content" xml:space="preserve"><value>構成</value></data>
+  <data name="NavSettings.Content" xml:space="preserve"><value>設定</value></data>
+  <data name="NavOverlay.Content" xml:space="preserve"><value>オーバーレイ</value></data>
+  <data name="NavData.Content" xml:space="preserve"><value>データ処理</value></data>
+  <data name="NavCapture.Content" xml:space="preserve"><value>キャプチャ</value></data>
+  <data name="NavLogging.Content" xml:space="preserve"><value>ログ</value></data>
+  <data name="NavOther.Content" xml:space="preserve"><value>その他</value></data>
+  <data name="NavAbout.Content" xml:space="preserve"><value>情報</value></data>
+  <data name="AppearanceLabel.Text" xml:space="preserve"><value>外観</value></data>
+  <data name="AppearanceSelector.AutomationProperties.Name" xml:space="preserve"><value>外観</value></data>
+  <data name="AppearanceSystem.Content" xml:space="preserve"><value>システム</value></data>
+  <data name="AppearanceLight.Content" xml:space="preserve"><value>ライト</value></data>
+  <data name="AppearanceDark.Content" xml:space="preserve"><value>ダーク</value></data>
+  <data name="PageTitle.Text" xml:space="preserve"><value>概要</value></data>
+  <data name="ProcessStatus.Text" xml:space="preserve"><value>アプリケーション未選択</value></data>
+  <data name="ProcessStatus.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="CaptureStatus.Text" xml:space="preserve"><value>キャプチャ: 待機中</value></data>
+  <data name="CaptureStatus.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="OverlayStatus.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="RateStatus.FontFamily" xml:space="preserve"><value>Noto Sans JP</value></data>
+  <data name="Loading.AutomationProperties.Name" xml:space="preserve"><value>PresentMon を読み込み中</value></data>
+  <data name="PresentMon_connection" xml:space="preserve"><value>PresentMon 接続</value></data>
+  <data name="Connecting" xml:space="preserve"><value>接続中</value></data>
+  <data name="Process" xml:space="preserve"><value>プロセス</value></data>
+  <data name="No_application_selected" xml:space="preserve"><value>アプリケーション未選択</value></data>
+  <data name="Capture__recording" xml:space="preserve"><value>キャプチャ: 記録中</value></data>
+  <data name="Capture__idle" xml:space="preserve"><value>キャプチャ: 待機中</value></data>
+  <data name="hidden" xml:space="preserve"><value>非表示</value></data>
+  <data name="shown" xml:space="preserve"><value>表示</value></data>
+  <data name="Auto_hide" xml:space="preserve"><value>自動非表示</value></data>
+  <data name="StatusOn" xml:space="preserve"><value>オン</value></data>
+  <data name="StatusOff" xml:space="preserve"><value>オフ</value></data>
+  <data name="Poll" xml:space="preserve"><value>ポーリング</value></data>
+  <data name="Draw" xml:space="preserve"><value>描画</value></data>
+  <data name="PresentMon" xml:space="preserve"><value>PresentMon</value></data>
+  <data name="PresentMon_loadout" xml:space="preserve"><value>PresentMon 構成</value></data>
+  <data name="Toggle_ETL_logging" xml:space="preserve"><value>ETL ログを切り替え</value></data>
+  <data name="Unable_to_finish_shutdown" xml:space="preserve"><value>終了処理を完了できません</value></data>
+  <data name="Application" xml:space="preserve"><value>アプリケーション</value></data>
+  <data name="Build" xml:space="preserve"><value>ビルド</value></data>
+  <data name="Service" xml:space="preserve"><value>サービス</value></data>
+  <data name="Runtime" xml:space="preserve"><value>ランタイム</value></data>
+
+  <data name="Overview" xml:space="preserve"><value>概要</value></data>
+  <data name="Loadout" xml:space="preserve"><value>構成</value></data>
+  <data name="Overlay" xml:space="preserve"><value>オーバーレイ</value></data>
+  <data name="Data_processing" xml:space="preserve"><value>データ処理</value></data>
+  <data name="Capture" xml:space="preserve"><value>キャプチャ</value></data>
+  <data name="Logging" xml:space="preserve"><value>ログ</value></data>
+  <data name="Other" xml:space="preserve"><value>その他</value></data>
+  <data name="About" xml:space="preserve"><value>情報</value></data>
+  <data name="Choose_an_application__configure_the_overlay__and_capture_performance_data_" xml:space="preserve"><value>アプリケーションを選択し、オーバーレイを設定してパフォーマンスデータをキャプチャします。</value></data>
+  <data name="Build_your_custom_overlay_with_graphs_and_readouts__Changes_are_saved_automatically_" xml:space="preserve"><value>グラフと読み取り値でカスタムオーバーレイを作成します。変更は自動的に保存されます。</value></data>
+  <data name="Control_where_the_overlay_appears_and_how_it_looks_" xml:space="preserve"><value>オーバーレイの表示位置と外観を設定します。</value></data>
+  <data name="Configure_sampling__timing__and_device_selection_" xml:space="preserve"><value>サンプリング、タイミング、デバイス選択を設定します。</value></data>
+  <data name="Choose_how_performance_data_is_recorded_" xml:space="preserve"><value>パフォーマンスデータの記録方法を設定します。</value></data>
+  <data name="Access_diagnostic_logs_and_tracing_options_" xml:space="preserve"><value>診断ログとトレースの設定を確認します。</value></data>
+  <data name="Manage_shortcuts__targeting__and_application_preferences_" xml:space="preserve"><value>ショートカット、対象選択、アプリケーション設定を管理します。</value></data>
+  <data name="Application__service__and_build_information_" xml:space="preserve"><value>アプリケーション、サービス、ビルド情報。</value></data>
+
+  <data name="Start_capture" xml:space="preserve"><value>キャプチャを開始</value></data>
+  <data name="Stop_capture" xml:space="preserve"><value>キャプチャを停止</value></data>
+  <data name="Refresh_processes" xml:space="preserve"><value>プロセスを更新</value></data>
+  <data name="Clear_target" xml:space="preserve"><value>対象を解除</value></data>
+  <data name="Search_running_applications_by_name__window__or_PID" xml:space="preserve"><value>名前、ウィンドウ、または PID で実行中のアプリを検索</value></data>
+  <data name="Select_an_application_from_the_search_results_" xml:space="preserve"><value>検索結果からアプリケーションを選択してください。</value></data>
+  <data name="Target_application" xml:space="preserve"><value>対象アプリケーション</value></data>
+  <data name="The_selected_process_supplies_the_overlay_and_capture_data_" xml:space="preserve"><value>選択したプロセスをオーバーレイとキャプチャの対象にします。</value></data>
+  <data name="Automatic_application_selection" xml:space="preserve"><value>アプリケーションを自動選択</value></data>
+  <data name="Automatic_targeting" xml:space="preserve"><value>対象を自動選択</value></data>
+  <data name="Every_second__select_the_highest_load_application_whose_last_10_raw_GPU_Busy_samples_contain_a_change__Switching_targets_stops_an_active_capture_" xml:space="preserve"><value>1 秒ごとに、直近 10 個の GPU Busy 生サンプルに変化があるアプリケーションのうち、負荷が最も高いものを選択します。対象を切り替えると実行中のキャプチャを停止します。</value></data>
+  <data name="Show_overlay" xml:space="preserve"><value>オーバーレイを表示</value></data>
+  <data name="Display_the_configured_widgets_over_the_target_application_" xml:space="preserve"><value>設定したウィジェットを対象アプリケーション上に表示します。</value></data>
+  <data name="Basic" xml:space="preserve"><value>基本</value></data>
+  <data name="Game_experience" xml:space="preserve"><value>ゲーム体験</value></data>
+  <data name="GPU_focus" xml:space="preserve"><value>GPU 重視</value></data>
+  <data name="Power_and_temperature" xml:space="preserve"><value>電力と温度</value></data>
+  <data name="Custom" xml:space="preserve"><value>カスタム</value></data>
+  <data name="Overlay_loadout" xml:space="preserve"><value>オーバーレイ構成</value></data>
+  <data name="Overlay_preset" xml:space="preserve"><value>オーバーレイプリセット</value></data>
+  <data name="Edit_custom_loadout" xml:space="preserve"><value>カスタム構成を編集</value></data>
+  <data name="Preset" xml:space="preserve"><value>プリセット</value></data>
+  <data name="Start_with_a_built_in_preset_or_edit_the_custom_overlay_loadout_" xml:space="preserve"><value>組み込みプリセットを使用するか、カスタムオーバーレイ構成を編集します。</value></data>
+  <data name="Capture_duration_in_seconds" xml:space="preserve"><value>キャプチャ時間 (秒)</value></data>
+  <data name="Limit_capture_duration" xml:space="preserve"><value>キャプチャ時間を制限</value></data>
+  <data name="Capture_duration" xml:space="preserve"><value>キャプチャ時間</value></data>
+  <data name="Stop_recording_automatically_after_this_many_seconds_" xml:space="preserve"><value>指定した秒数後に記録を自動停止します。</value></data>
+  <data name="Capture_directory" xml:space="preserve"><value>キャプチャフォルダー</value></data>
+  <data name="Open_capture_folder" xml:space="preserve"><value>キャプチャフォルダーを開く</value></data>
+  <data name="Performance_captures_are_saved_in_this_folder_" xml:space="preserve"><value>パフォーマンスキャプチャはこのフォルダーに保存されます。</value></data>
+  <data name="Hotkeys" xml:space="preserve"><value>ホットキー</value></data>
+  <data name="Start_or_stop_capture" xml:space="preserve"><value>キャプチャを開始または停止</value></data>
+  <data name="Show_or_hide_overlay" xml:space="preserve"><value>オーバーレイを表示または非表示</value></data>
+  <data name="Cycle_overlay_preset" xml:space="preserve"><value>オーバーレイプリセットを切り替え</value></data>
+  <data name="Select_to_change_or_clear_this_global_keyboard_shortcut_" xml:space="preserve"><value>選択すると、このグローバルキーボードショートカットを変更または解除できます。</value></data>
+
+  <data name="Action_failed" xml:space="preserve"><value>操作に失敗しました</value></data>
+  <data name="Choose" xml:space="preserve"><value>選択</value></data>
+  <data name="On" xml:space="preserve"><value>オン</value></data>
+  <data name="Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="None_available" xml:space="preserve"><value>利用可能な項目なし</value></data>
+  <data name="Select_an_option" xml:space="preserve"><value>項目を選択</value></data>
+  <data name="Loading_PresentMon" xml:space="preserve"><value>PresentMon を読み込み中</value></data>
+
+  <data name="Key" xml:space="preserve"><value>キー</value></data>
+  <data name="Choose_a_key" xml:space="preserve"><value>キーを選択</value></data>
+  <data name="Choose_a_key_and_optional_modifiers_for_this_shortcut_" xml:space="preserve"><value>このショートカットのキーと、必要に応じて修飾キーを選択してください。</value></data>
+  <data name="Modifiers" xml:space="preserve"><value>修飾キー</value></data>
+  <data name="Shortcut" xml:space="preserve"><value>ショートカット</value></data>
+  <data name="Edit_hotkey" xml:space="preserve"><value>ホットキーを編集</value></data>
+  <data name="Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Clear" xml:space="preserve"><value>解除</value></data>
+  <data name="Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Not_assigned" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="Hotkey_action" xml:space="preserve"><value>ホットキー操作</value></data>
+  <data name="Choose_a_hotkey" xml:space="preserve"><value>ホットキーを選択</value></data>
+  <data name="Edit" xml:space="preserve"><value>編集</value></data>
+
+  <data name="Changes_apply_to_the_active_overlay_and_are_saved_automatically_" xml:space="preserve"><value>変更は現在のオーバーレイに適用され、自動的に保存されます。</value></data>
+  <data name="Windowed_mode" xml:space="preserve"><value>ウィンドウモード</value></data>
+  <data name="Display_widgets_in_a_standalone_window_instead_of_an_overlay_following_the_target_application_" xml:space="preserve"><value>対象アプリケーションに追従するオーバーレイではなく、独立したウィンドウにウィジェットを表示します。</value></data>
+  <data name="Automatic_hide" xml:space="preserve"><value>自動非表示</value></data>
+  <data name="Automatically_hide_the_overlay_while_a_capture_is_running_" xml:space="preserve"><value>キャプチャ中はオーバーレイを自動的に非表示にします。</value></data>
+  <data name="Position" xml:space="preserve"><value>位置</value></data>
+  <data name="Choose_the_corner_of_the_target_window_for_the_overlay_" xml:space="preserve"><value>オーバーレイを表示する対象ウィンドウの隅を選択します。</value></data>
+  <data name="Top_left" xml:space="preserve"><value>左上</value></data>
+  <data name="Top_right" xml:space="preserve"><value>右上</value></data>
+  <data name="Bottom_left" xml:space="preserve"><value>左下</value></data>
+  <data name="Bottom_right" xml:space="preserve"><value>右下</value></data>
+  <data name="Width" xml:space="preserve"><value>幅</value></data>
+  <data name="Width_of_the_overlay_in_pixels__Its_content_determines_its_height_" xml:space="preserve"><value>オーバーレイの幅 (ピクセル)。高さは内容に応じて決まります。</value></data>
+  <data name="Time_scale" xml:space="preserve"><value>時間スケール</value></data>
+  <data name="Range_of_time_shown_on_graph_axes__in_seconds__This_controls_scrolling_speed_" xml:space="preserve"><value>グラフ軸に表示する時間範囲 (秒)。スクロール速度を決めます。</value></data>
+  <data name="Graphics_scaling_factor" xml:space="preserve"><value>グラフィックス倍率</value></data>
+  <data name="Graphics_scaling" xml:space="preserve"><value>グラフィックスの拡大</value></data>
+  <data name="Enlarge_overlay_graphics_for_readability_on_high_DPI_displays__Factor_ranges_from_1_to_5_" xml:space="preserve"><value>高 DPI ディスプレイで見やすくするため、オーバーレイを拡大します。倍率は 1～5 です。</value></data>
+  <data name="Draw_rate" xml:space="preserve"><value>描画レート</value></data>
+  <data name="Number_of_times_the_overlay_is_drawn_per_second__FPS__" xml:space="preserve"><value>1 秒あたりのオーバーレイ描画回数 (FPS)。</value></data>
+  <data name="Background_color" xml:space="preserve"><value>背景色</value></data>
+  <data name="Background_color_and_opacity_of_the_entire_overlay_" xml:space="preserve"><value>オーバーレイ全体の背景色と不透明度。</value></data>
+  <data name="Advanced_layout" xml:space="preserve"><value>詳細レイアウト</value></data>
+  <data name="Developer_settings_for_overlay_spacing_and_typography" xml:space="preserve"><value>オーバーレイの間隔と文字体裁に関する開発者設定</value></data>
+  <data name="Overlay_margin" xml:space="preserve"><value>オーバーレイ余白</value></data>
+  <data name="Outer_spacing_around_the_overlay__in_pixels_" xml:space="preserve"><value>オーバーレイ外側の間隔 (ピクセル)。</value></data>
+  <data name="Overlay_border" xml:space="preserve"><value>オーバーレイ境界線</value></data>
+  <data name="Thickness_of_the_overlay_border__in_pixels_" xml:space="preserve"><value>オーバーレイ境界線の太さ (ピクセル)。</value></data>
+  <data name="Overlay_padding" xml:space="preserve"><value>オーバーレイ内側余白</value></data>
+  <data name="Space_between_the_overlay_edge_and_its_widgets__in_pixels_" xml:space="preserve"><value>オーバーレイの端とウィジェットの間隔 (ピクセル)。</value></data>
+  <data name="Overlay_border_color" xml:space="preserve"><value>オーバーレイ境界線の色</value></data>
+  <data name="Color_and_opacity_of_the_overlay_border_" xml:space="preserve"><value>オーバーレイ境界線の色と不透明度。</value></data>
+  <data name="Graph_margin" xml:space="preserve"><value>グラフ余白</value></data>
+  <data name="Outer_spacing_around_each_graph__in_pixels_" xml:space="preserve"><value>各グラフ外側の間隔 (ピクセル)。</value></data>
+  <data name="Graph_border" xml:space="preserve"><value>グラフ境界線</value></data>
+  <data name="Thickness_of_graph_borders__in_pixels_" xml:space="preserve"><value>グラフ境界線の太さ (ピクセル)。</value></data>
+  <data name="Graph_padding" xml:space="preserve"><value>グラフ内側余白</value></data>
+  <data name="Space_inside_each_graph__in_pixels_" xml:space="preserve"><value>各グラフ内部の間隔 (ピクセル)。</value></data>
+  <data name="Graph_axis_font" xml:space="preserve"><value>グラフ軸フォント</value></data>
+  <data name="Font_family_for_graph_axis_labels__A_font_name_is_required_" xml:space="preserve"><value>グラフ軸ラベルのフォント。フォント名が必要です。</value></data>
+  <data name="Graph_axis_text_size" xml:space="preserve"><value>グラフ軸の文字サイズ</value></data>
+  <data name="Size_of_graph_axis_labels__in_pixels_" xml:space="preserve"><value>グラフ軸ラベルのサイズ (ピクセル)。</value></data>
+
+  <data name="Polling_cadence" xml:space="preserve"><value>ポーリング間隔</value></data>
+  <data name="Polling_cadence_recommendation" xml:space="preserve"><value>ポーリング間隔の推奨</value></data>
+  <data name="Polling_rate" xml:space="preserve"><value>ポーリングレート</value></data>
+  <data name="Polling_rate_in_hertz" xml:space="preserve"><value>ポーリングレート (Hz)</value></data>
+  <data name="How_often_to_request_metric_data_from_the_API__in_hertz__This_sets_the_temporal_resolution_of_graphs_and_readouts_" xml:space="preserve"><value>API からメトリックデータを要求する頻度 (Hz)。グラフと読み取り値の時間分解能を決めます。</value></data>
+  <data name="Telemetry_period" xml:space="preserve"><value>テレメトリ周期</value></data>
+  <data name="Time_between_service_power_telemetry_requests__in_milliseconds__This_affects_metrics_such_as_GPU_power_and_temperature_" xml:space="preserve"><value>サービスに電力テレメトリを要求する間隔 (ミリ秒)。GPU 電力や温度などのメトリックに影響します。</value></data>
+  <data name="Statistics_window" xml:space="preserve"><value>統計ウィンドウ</value></data>
+  <data name="Sliding_sample_window_for_statistics_such_as_averages_and_percentiles__in_milliseconds_" xml:space="preserve"><value>平均やパーセンタイルなどの統計に使うスライディングサンプル範囲 (ミリ秒)。</value></data>
+  <data name="Per_metric_device_selection" xml:space="preserve"><value>メトリックごとのデバイス選択</value></data>
+  <data name="Show_GPU_selectors_for_individual_loadout_metrics_to_track_multiple_GPUs__When_off__every_GPU_metric_uses_the_default_adapter_" xml:space="preserve"><value>構成内の各メトリックに GPU 選択欄を表示し、複数 GPU を追跡します。オフの場合、すべての GPU メトリックで既定のアダプターを使用します。</value></data>
+  <data name="Default_graphics_adapter" xml:space="preserve"><value>既定のグラフィックスアダプター</value></data>
+  <data name="Default_adapter" xml:space="preserve"><value>既定のアダプター</value></data>
+  <data name="No_graphics_adapters_are_currently_available__Connect_to_the_PresentMon_service_to_enumerate_devices_" xml:space="preserve"><value>現在利用可能なグラフィックスアダプターがありません。PresentMon サービスに接続するとデバイスを列挙できます。</value></data>
+  <data name="GPU_used_for_new_loadout_rows__frame_queries__and_metrics_that_follow_the_global_adapter_" xml:space="preserve"><value>新しい構成行、フレームクエリ、グローバルアダプターに従うメトリックで使用する GPU。</value></data>
+  <data name="ETW_manual_flush_period_in_milliseconds" xml:space="preserve"><value>ETW 手動フラッシュ周期 (ミリ秒)</value></data>
+  <data name="Manual_ETW_flush" xml:space="preserve"><value>ETW 手動フラッシュ</value></data>
+  <data name="Flush_ETW_buffers_manually_instead_of_relying_on_the_default_1_000_ms_timer__A_service_restart_may_be_required_" xml:space="preserve"><value>既定の 1,000 ms タイマーに頼らず ETW バッファーを手動でフラッシュします。サービスの再起動が必要な場合があります。</value></data>
+  <data name="ETW_flush_period" xml:space="preserve"><value>ETW フラッシュ周期</value></data>
+  <data name="Time_between_manual_flushes__in_milliseconds__The_metric_window_offset_should_roughly_match_this_period_" xml:space="preserve"><value>手動フラッシュの間隔 (ミリ秒)。メトリックウィンドウのオフセットはこの周期に近づけてください。</value></data>
+  <data name="Metric_window_offset" xml:space="preserve"><value>メトリックウィンドウのオフセット</value></data>
+  <data name="Offset_the_sliding_window__in_milliseconds__to_avoid_including_frames_whose_data_has_not_arrived_yet_" xml:space="preserve"><value>データがまだ到着していないフレームを含めないよう、スライディングウィンドウをオフセットします (ミリ秒)。</value></data>
+  <data name="Advanced_data_settings" xml:space="preserve"><value>詳細データ設定</value></data>
+  <data name="Developer_controls_for_ETW_buffering_and_metric_timing" xml:space="preserve"><value>ETW バッファーとメトリックタイミングに関する開発者設定</value></data>
+
+  <data name="Summary_statistics" xml:space="preserve"><value>概要統計</value></data>
+  <data name="Generate_a_file_summarizing_statistics_over_the_entire_capture_run_" xml:space="preserve"><value>キャプチャ全体の統計をまとめたファイルを生成します。</value></data>
+  <data name="Target_blocklist" xml:space="preserve"><value>対象ブロックリスト</value></data>
+  <data name="Filter_common_applications_that_do_not_render_real_time_graphics_out_of_the_target_process_list_" xml:space="preserve"><value>リアルタイムグラフィックスを描画しない一般的なアプリケーションを対象プロセス一覧から除外します。</value></data>
+  <data name="Capture_hotkeys" xml:space="preserve"><value>キャプチャのホットキー</value></data>
+  <data name="Configure_keyboard_shortcuts_for_starting_a_capture__showing_the_overlay__and_cycling_presets_" xml:space="preserve"><value>キャプチャの開始、オーバーレイの表示、プリセットの切り替えに使うキーボードショートカットを設定します。</value></data>
+  <data name="Capture_folder" xml:space="preserve"><value>キャプチャフォルダー</value></data>
+  <data name="Open_the_folder_containing_captured_metric_data_and_summary_statistics_" xml:space="preserve"><value>キャプチャしたメトリックデータと概要統計が保存されたフォルダーを開きます。</value></data>
+  <data name="Open_in_Explorer" xml:space="preserve"><value>エクスプローラーで開く</value></data>
+  <data name="ETL_capture_is_currently_disabled" xml:space="preserve"><value>ETL キャプチャは現在無効です</value></data>
+  <data name="Raw_ETL_recording_and_its_shortcut_are_unavailable_in_this_version__Existing_trace_files_remain_accessible_" xml:space="preserve"><value>このバージョンでは ETL 生記録とそのショートカットを利用できません。既存のトレースファイルは引き続き利用できます。</value></data>
+  <data name="Unavailable" xml:space="preserve"><value>利用不可</value></data>
+  <data name="ETL_capture_hotkey_is_unavailable" xml:space="preserve"><value>ETL キャプチャのホットキーは利用できません</value></data>
+  <data name="ETL_capture_hotkey" xml:space="preserve"><value>ETL キャプチャのホットキー</value></data>
+  <data name="Keyboard_shortcut_for_starting_or_finishing_an_ETL_trace_" xml:space="preserve"><value>ETL トレースの開始または終了に使うキーボードショートカット。</value></data>
+  <data name="ETL_disabled" xml:space="preserve"><value>ETL 無効</value></data>
+  <data name="ETL_capture_is_disabled" xml:space="preserve"><value>ETL キャプチャは無効です</value></data>
+  <data name="Capture_ETL" xml:space="preserve"><value>ETL をキャプチャ</value></data>
+  <data name="Raw_ETL_capture_is_currently_disabled_" xml:space="preserve"><value>ETL の生キャプチャは現在無効です。</value></data>
+  <data name="ETL_folder" xml:space="preserve"><value>ETL フォルダー</value></data>
+  <data name="Open_the_folder_containing_captured__etl_trace_files_" xml:space="preserve"><value>キャプチャした .etl トレースファイルが保存されたフォルダーを開きます。</value></data>
+  <data name="Application_logs" xml:space="preserve"><value>アプリケーションログ</value></data>
+  <data name="Open_the_folder_containing_PresentMon_diagnostic_logs_" xml:space="preserve"><value>PresentMon の診断ログが保存されたフォルダーを開きます。</value></data>
+  <data name="Keyboard_shortcuts" xml:space="preserve"><value>キーボードショートカット</value></data>
+  <data name="Customize_shortcuts_for_capture__overlay_visibility__and_preset_selection_" xml:space="preserve"><value>キャプチャ、オーバーレイ表示、プリセット選択のショートカットをカスタマイズします。</value></data>
+  <data name="Open_blocklist" xml:space="preserve"><value>ブロックリストを開く</value></data>
+  <data name="Open_the_blocklist_file_used_to_filter_common_applications_from_the_target_selector__Enable_or_disable_filtering_in_Capture_settings_" xml:space="preserve"><value>対象選択から一般的なアプリケーションを除外するブロックリストを開きます。フィルターの有効化はキャプチャ設定で行います。</value></data>
+  <data name="Reset_preferences" xml:space="preserve"><value>設定をリセット</value></data>
+  <data name="Restore_preferences_and_keyboard_shortcuts_to_their_defaults__A_confirmation_is_required_before_resetting_" xml:space="preserve"><value>設定とキーボードショートカットを既定値に戻します。リセット前に確認が必要です。</value></data>
+  <data name="Reset_preferences_" xml:space="preserve"><value>設定をリセットしますか?</value></data>
+  <data name="All_current_preferences_and_keyboard_shortcuts_will_be_replaced_with_their_default_values_" xml:space="preserve"><value>現在の設定とキーボードショートカットをすべて既定値に置き換えます。</value></data>
+  <data name="Confirm_preference_reset" xml:space="preserve"><value>設定リセットの確認</value></data>
+  <data name="PresentMon_performance_monitoring__powered_by_a_native_WinUI_3_interface_" xml:space="preserve"><value>ネイティブ WinUI 3 インターフェイスによる PresentMon パフォーマンス監視。</value></data>
+  <data name="WinUI_3___Windows_App_SDK" xml:space="preserve"><value>WinUI 3 / Windows App SDK</value></data>
+  <data name="Interface" xml:space="preserve"><value>インターフェイス</value></data>
+  <data name="Native_Windows_controls_with_keyboard_and_screen_reader_support_" xml:space="preserve"><value>キーボードとスクリーンリーダーに対応したネイティブ Windows コントロール。</value></data>
+  <data name="Not_available" xml:space="preserve"><value>利用不可</value></data>
+  <data name="Application_information_is_unavailable" xml:space="preserve"><value>アプリケーション情報を利用できません</value></data>
+  <data name="Build_and_service_information_will_appear_once_the_application_has_connected_" xml:space="preserve"><value>アプリケーションが接続するとビルドとサービスの情報が表示されます。</value></data>
+
+  <data name="Add_graph" xml:space="preserve"><value>グラフを追加</value></data>
+  <data name="Add_readout" xml:space="preserve"><value>読み取り値を追加</value></data>
+  <data name="Open_loadout" xml:space="preserve"><value>構成を開く</value></data>
+  <data name="Save_loadout" xml:space="preserve"><value>構成を保存</value></data>
+  <data name="Metric_information_is_not_available_yet__Connect_to_PresentMon_to_edit_the_loadout_" xml:space="preserve"><value>メトリック情報をまだ利用できません。PresentMon に接続すると構成を編集できます。</value></data>
+  <data name="Add_a_graph_or_readout_to_start_your_overlay_" xml:space="preserve"><value>グラフまたは読み取り値を追加してオーバーレイを作成します。</value></data>
+  <data name="_0__widget_in_display_order__Drag_cards_to_reorder__or_use_Move_up_and_Move_down_" xml:space="preserve"><value>表示順に {0} 個のウィジェット。カードをドラッグするか、上へ移動/下へ移動を使って並べ替えます。</value></data>
+  <data name="_0__widgets_in_display_order__Drag_cards_to_reorder__or_use_Move_up_and_Move_down_" xml:space="preserve"><value>表示順に {0} 個のウィジェット。カードをドラッグするか、上へ移動/下へ移動を使って並べ替えます。</value></data>
+  <data name="Overlay_widgets__Drag_to_reorder__or_use_each_widget_s_move_buttons_" xml:space="preserve"><value>オーバーレイウィジェット。ドラッグまたは各ウィジェットの移動ボタンで並べ替えます。</value></data>
+  <data name="Move_widget_up" xml:space="preserve"><value>ウィジェットを上へ移動</value></data>
+  <data name="Move_widget_down" xml:space="preserve"><value>ウィジェットを下へ移動</value></data>
+  <data name="Remove_widget" xml:space="preserve"><value>ウィジェットを削除</value></data>
+  <data name="Readout" xml:space="preserve"><value>読み取り値</value></data>
+  <data name="Graph" xml:space="preserve"><value>グラフ</value></data>
+  <data name="Widget_type" xml:space="preserve"><value>ウィジェットの種類</value></data>
+  <data name="Graph_type" xml:space="preserve"><value>グラフの種類</value></data>
+  <data name="Line" xml:space="preserve"><value>折れ線</value></data>
+  <data name="Histogram" xml:space="preserve"><value>ヒストグラム</value></data>
+  <data name="Add_metric_series" xml:space="preserve"><value>メトリック系列を追加</value></data>
+  <data name="Graph_settings" xml:space="preserve"><value>グラフ設定</value></data>
+  <data name="Readout_settings" xml:space="preserve"><value>読み取り値の設定</value></data>
+  <data name="Series__0_" xml:space="preserve"><value>系列 {0}</value></data>
+  <data name="Remove_series__0_" xml:space="preserve"><value>系列 {0} を削除</value></data>
+  <data name="Find_a_metric" xml:space="preserve"><value>メトリックを検索</value></data>
+  <data name="Metric_for_series__0_" xml:space="preserve"><value>系列 {0} のメトリック</value></data>
+  <data name="Choose_a_metric_reported_by_PresentMon_" xml:space="preserve"><value>PresentMon が報告するメトリックを選択します。</value></data>
+  <data name="Metric" xml:space="preserve"><value>メトリック</value></data>
+  <data name="Statistic" xml:space="preserve"><value>統計</value></data>
+  <data name="Unavailable___0__" xml:space="preserve"><value>利用不可 ({0})</value></data>
+  <data name="Unknown_GPU" xml:space="preserve"><value>不明な GPU</value></data>
+  <data name="GPU_device" xml:space="preserve"><value>GPU デバイス</value></data>
+  <data name="Array_index" xml:space="preserve"><value>配列インデックス</value></data>
+  <data name="This_metric_is_unavailable_" xml:space="preserve"><value>このメトリックは利用できません。</value></data>
+  <data name="Right_axis" xml:space="preserve"><value>右軸</value></data>
+  <data name="Use_right_axis" xml:space="preserve"><value>右軸を使用</value></data>
+  <data name="Line_color" xml:space="preserve"><value>線の色</value></data>
+  <data name="Fill_color" xml:space="preserve"><value>塗りつぶしの色</value></data>
+  <data name="Histogram_data" xml:space="preserve"><value>ヒストグラムデータ</value></data>
+  <data name="Graph_axes" xml:space="preserve"><value>グラフ軸</value></data>
+  <data name="Value_range" xml:space="preserve"><value>値の範囲</value></data>
+  <data name="Left_value_range" xml:space="preserve"><value>左側の値の範囲</value></data>
+  <data name="Right_value_range" xml:space="preserve"><value>右側の値の範囲</value></data>
+  <data name="Automatically_scale_the_range__or_enter_the_minimum_and_maximum_values_" xml:space="preserve"><value>範囲を自動調整するか、最小値と最大値を入力します。</value></data>
+  <data name="Range_for_metric_series_assigned_to_the_right_axis_" xml:space="preserve"><value>右軸に割り当てたメトリック系列の範囲。</value></data>
+  <data name="Bottom_axis" xml:space="preserve"><value>下軸</value></data>
+  <data name="Show_the_time_axis_along_the_bottom_of_this_graph_" xml:space="preserve"><value>このグラフの下部に時間軸を表示します。</value></data>
+  <data name="Show_bottom_axis" xml:space="preserve"><value>下軸を表示</value></data>
+  <data name="Number_of_bins" xml:space="preserve"><value>ビンの数</value></data>
+  <data name="Number_of_bars_in_the_histogram_" xml:space="preserve"><value>ヒストグラムの棒の数。</value></data>
+  <data name="Count_range" xml:space="preserve"><value>カウント範囲</value></data>
+  <data name="Range_of_counts_displayed_in_each_bin_" xml:space="preserve"><value>各ビンに表示するカウントの範囲。</value></data>
+  <data name="Expected_data_points___0__seconds_x__1__Hz____2___Change_time_scale_in_Overlay_settings_and_poll_rate_in_Data_processing_settings_" xml:space="preserve"><value>予想データ点数: {0} 秒 × {1} Hz = {2}。時間スケールはオーバーレイ設定、ポーリングレートはデータ処理設定で変更します。</value></data>
+  <data name="Style" xml:space="preserve"><value>スタイル</value></data>
+  <data name="Graph_height" xml:space="preserve"><value>グラフの高さ</value></data>
+  <data name="Vertical_size_of_this_graph_in_pixels_" xml:space="preserve"><value>このグラフの縦サイズ (ピクセル)。</value></data>
+  <data name="Vertical_divisions" xml:space="preserve"><value>垂直分割数</value></data>
+  <data name="Number_of_vertical_divisions_in_the_grid_" xml:space="preserve"><value>グリッドの垂直分割数。</value></data>
+  <data name="Horizontal_divisions" xml:space="preserve"><value>水平分割数</value></data>
+  <data name="Number_of_horizontal_divisions_in_the_grid_" xml:space="preserve"><value>グリッドの水平分割数。</value></data>
+  <data name="Font_size" xml:space="preserve"><value>フォントサイズ</value></data>
+  <data name="Text_size_for_this_graph_" xml:space="preserve"><value>このグラフの文字サイズ。</value></data>
+  <data name="Text_size_for_this_readout_" xml:space="preserve"><value>この読み取り値の文字サイズ。</value></data>
+  <data name="Grid_color" xml:space="preserve"><value>グリッドの色</value></data>
+  <data name="Text_color" xml:space="preserve"><value>文字色</value></data>
+  <data name="Divider_color" xml:space="preserve"><value>区切り線の色</value></data>
+  <data name="Border_color" xml:space="preserve"><value>境界線の色</value></data>
+  <data name="Show_label" xml:space="preserve"><value>ラベルを表示</value></data>
+  <data name="Display_the_metric_name_next_to_its_value_" xml:space="preserve"><value>値の横にメトリック名を表示します。</value></data>
+  <data name="Metric_labels" xml:space="preserve"><value>メトリックラベル</value></data>
+  <data name="Device_ID" xml:space="preserve"><value>デバイス ID</value></data>
+  <data name="Include_the_GPU_device_ID_in_metric_labels_" xml:space="preserve"><value>メトリックラベルに GPU デバイス ID を含めます。</value></data>
+  <data name="Include_device_ID" xml:space="preserve"><value>デバイス ID を含める</value></data>
+  <data name="Device_name" xml:space="preserve"><value>デバイス名</value></data>
+  <data name="Include_the_GPU_name_in_metric_labels_" xml:space="preserve"><value>メトリックラベルに GPU 名を含めます。</value></data>
+  <data name="Include_device_name" xml:space="preserve"><value>デバイス名を含める</value></data>
+  <data name="Minimum" xml:space="preserve"><value>最小</value></data>
+  <data name="Maximum" xml:space="preserve"><value>最大</value></data>
+  <data name="Autoscale" xml:space="preserve"><value>自動スケール</value></data>
+</root>

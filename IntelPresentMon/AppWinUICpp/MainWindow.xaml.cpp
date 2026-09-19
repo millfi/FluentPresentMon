@@ -7,6 +7,7 @@
 
 #include "Core/ConfigModels.h"
 #include "Core/ConfigurationJson.h"
+#include "Core/Localization.h"
 #include "Core/StartupOptions.h"
 #include "Core/UiDiagnostics.h"
 #include "Services/AppSession.h"
@@ -62,6 +63,11 @@ std::string ToString(hstring const& value)
     return to_string(value);
 }
 
+hstring Local(std::string_view value)
+{
+    return pmon::ui::localization::Text(value);
+}
+
 std::string Trim(std::string value)
 {
     const auto first = std::find_if_not(value.begin(), value.end(), [](unsigned char character) { return std::isspace(character) != 0; });
@@ -80,10 +86,10 @@ bool ContainsInsensitive(std::string source, std::string const& query)
 std::string HotkeyActionLabel(pmon::ui::core::HotkeyAction action)
 {
     switch (action) {
-    case pmon::ui::core::HotkeyAction::ToggleCapture: return "Start or stop capture";
-    case pmon::ui::core::HotkeyAction::ToggleOverlay: return "Show or hide overlay";
-    case pmon::ui::core::HotkeyAction::CyclePreset: return "Cycle overlay preset";
-    case pmon::ui::core::HotkeyAction::ToggleEtlLogging: return "Toggle ETL logging";
+    case pmon::ui::core::HotkeyAction::ToggleCapture: return ToString(Local("Start or stop capture"));
+    case pmon::ui::core::HotkeyAction::ToggleOverlay: return ToString(Local("Show or hide overlay"));
+    case pmon::ui::core::HotkeyAction::CyclePreset: return ToString(Local("Cycle overlay preset"));
+    case pmon::ui::core::HotkeyAction::ToggleEtlLogging: return ToString(Local("Toggle ETL logging"));
     }
     return {};
 }
@@ -91,7 +97,7 @@ std::string HotkeyActionLabel(pmon::ui::core::HotkeyAction action)
 void Identify(DependencyObject const& element, std::string const& id, std::string const& name)
 {
     AutomationProperties::SetAutomationId(element, ToHString(id));
-    AutomationProperties::SetName(element, ToHString(name));
+    AutomationProperties::SetName(element, Local(name));
 }
 
 pmon::ui::views::SettingsView::AppInfo ToAppInfo(std::unordered_map<std::string, std::string> const& values)
@@ -188,12 +194,12 @@ IAsyncAction MainWindow::RunShellSmokeAsync()
             throw hresult_error(E_FAIL, L"Navigation did not render the selected page.");
         }
     };
-    co_await navigate(L"Overview", L"Overview");
+    co_await navigate(L"Overview", Local("Overview"));
     for (auto const id : { L"ToggleCapture", L"RefreshProcesses", L"ClearTarget", L"ProcessSelector", L"AutoTarget",
         L"ShowOverlay", L"PresetSelector", L"CaptureDuration", L"CaptureDirectory", L"HotkeyToggleCapture" }) {
         co_await waitFor(id);
     }
-    co_await navigate(L"Overlay", L"Overlay");
+    co_await navigate(L"Overlay", Local("Overlay"));
     auto advancedOverlay = (co_await waitFor(L"AdvancedOverlayLayout")).try_as<Expander>();
     if (!advancedOverlay) {
         throw hresult_error(E_FAIL, L"Advanced overlay settings control has the wrong type.");
@@ -224,7 +230,7 @@ IAsyncAction MainWindow::RunShellSmokeAsync()
     if (!input || !input.Focus(FocusState::Keyboard)) throw hresult_error(E_FAIL, L"Time scale editor could not take focus.");
     input.Text(L"2.5");
     if (timeRange.Value() != 10.0) throw hresult_error(E_FAIL, L"Regression test must start with uncommitted text.");
-    co_await navigate(L"Data", L"Data processing");
+    co_await navigate(L"Data", Local("Data processing"));
     co_await resume_after(std::chrono::milliseconds(100));
     co_await pmon::ui::ResumeForeground{dispatcher};
     if (session_->Preferences().TimeRange != 2.5) throw hresult_error(E_FAIL, L"Navigation lost the pending Time scale edit.");
@@ -239,11 +245,11 @@ IAsyncAction MainWindow::RunShellSmokeAsync()
     if (session_->Preferences().MetricPollRate != changedRate) {
         throw hresult_error(E_FAIL, L"Metric poll-rate control did not update session preferences.");
     }
-    co_await navigate(L"Capture", L"Capture");
-    co_await navigate(L"Logging", L"Logging");
-    co_await navigate(L"Other", L"Other");
-    co_await navigate(L"About", L"About");
-    co_await navigate(L"Loadout", L"Loadout");
+    co_await navigate(L"Capture", Local("Capture"));
+    co_await navigate(L"Logging", Local("Logging"));
+    co_await navigate(L"Other", Local("Other"));
+    co_await navigate(L"About", Local("About"));
+    co_await navigate(L"Loadout", Local("Loadout"));
     co_await waitFor(L"LoadoutSummary");
     co_await waitFor(L"WidgetList");
     auto addGraph = co_await waitFor(L"AddGraph");
@@ -294,6 +300,7 @@ void MainWindow::Initialize(pmon::ui::services::StartupOptions const& options)
 {
     pmon::ui::diagnostics::Initialize(options.LogDirectory);
     InitializeComponent();
+    Title(Local("Fluent PresentMon"));
     session_ = std::make_shared<pmon::ui::services::AppSession>(options, DispatcherQueue());
 
     auto nativeWindow = this->m_inner.as<::IWindowNative>();
@@ -464,15 +471,15 @@ void MainWindow::RenderView()
     loadoutView_.reset();
     settingsView_.reset();
 
-    PageTitle().Text(section_ == L"Data" ? L"Data processing" : section_);
-    if (section_ == L"Overview") PageDescription().Text(L"Choose an application, configure the overlay, and capture performance data.");
-    else if (section_ == L"Loadout") PageDescription().Text(L"Build your custom overlay with graphs and readouts. Changes are saved automatically.");
-    else if (section_ == L"Overlay") PageDescription().Text(L"Control where the overlay appears and how it looks.");
-    else if (section_ == L"Data") PageDescription().Text(L"Configure sampling, timing, and device selection.");
-    else if (section_ == L"Capture") PageDescription().Text(L"Choose how performance data is recorded.");
-    else if (section_ == L"Logging") PageDescription().Text(L"Access diagnostic logs and tracing options.");
-    else if (section_ == L"Other") PageDescription().Text(L"Manage shortcuts, targeting, and application preferences.");
-    else PageDescription().Text(L"Application, service, and build information.");
+    PageTitle().Text(section_ == L"Data" ? Local("Data processing") : Local(ToString(section_)));
+    if (section_ == L"Overview") PageDescription().Text(Local("Choose an application, configure the overlay, and capture performance data."));
+    else if (section_ == L"Loadout") PageDescription().Text(Local("Build your custom overlay with graphs and readouts. Changes are saved automatically."));
+    else if (section_ == L"Overlay") PageDescription().Text(Local("Control where the overlay appears and how it looks."));
+    else if (section_ == L"Data") PageDescription().Text(Local("Configure sampling, timing, and device selection."));
+    else if (section_ == L"Capture") PageDescription().Text(Local("Choose how performance data is recorded."));
+    else if (section_ == L"Logging") PageDescription().Text(Local("Access diagnostic logs and tracing options."));
+    else if (section_ == L"Other") PageDescription().Text(Local("Manage shortcuts, targeting, and application preferences."));
+    else PageDescription().Text(Local("Application, service, and build information."));
 
     if (section_ == L"Loadout") {
         auto weak = get_weak();
@@ -527,7 +534,7 @@ UIElement MainWindow::BuildOverview()
     commands.Background(SolidColorBrush(Microsoft::UI::Colors::Transparent()));
 
     captureButton_ = AppBarButton();
-    captureButton_.Label(L"Start capture");
+    captureButton_.Label(Local("Start capture"));
     captureButton_.Icon(SymbolIcon(Symbol::Play));
     Identify(captureButton_, "ToggleCapture", "Start capture");
     captureButton_.Click([weak = get_weak()](IInspectable const&, RoutedEventArgs const&) {
@@ -536,7 +543,7 @@ UIElement MainWindow::BuildOverview()
     commands.PrimaryCommands().Append(captureButton_);
 
     AppBarButton refresh;
-    refresh.Label(L"Refresh processes");
+    refresh.Label(Local("Refresh processes"));
     refresh.Icon(SymbolIcon(Symbol::Refresh));
     Identify(refresh, "RefreshProcesses", "Refresh processes");
     refresh.Click([weak = get_weak()](IInspectable const&, RoutedEventArgs const&) {
@@ -545,7 +552,7 @@ UIElement MainWindow::BuildOverview()
     commands.PrimaryCommands().Append(refresh);
 
     clearTargetButton_ = AppBarButton();
-    clearTargetButton_.Label(L"Clear target");
+    clearTargetButton_.Label(Local("Clear target"));
     clearTargetButton_.Icon(SymbolIcon(Symbol::Clear));
     Identify(clearTargetButton_, "ClearTarget", "Clear target");
     clearTargetButton_.Click([weak = get_weak()](IInspectable const&, RoutedEventArgs const&) {
@@ -555,7 +562,7 @@ UIElement MainWindow::BuildOverview()
     layout.Children().Append(commands);
 
     processSelector_ = AutoSuggestBox();
-    processSelector_.PlaceholderText(L"Search running applications by name, window, or PID");
+    processSelector_.PlaceholderText(Local("Search running applications by name, window, or PID"));
     processSelector_.QueryIcon(SymbolIcon(Symbol::Find));
     processSelector_.Text(session_->SelectedProcess() ? ToHString(session_->SelectedProcess()->DisplayName()) : L"");
     processSelector_.HorizontalAlignment(HorizontalAlignment::Stretch);
@@ -613,8 +620,8 @@ UIElement MainWindow::BuildOverview()
 
     layout.Children().Append(pmon::ui::views::FormControls::Heading("Overlay loadout"));
     presetSelector_ = ComboBox();
-    for (auto const label : { L"Basic", L"Game experience", L"GPU focus", L"Power and temperature", L"Custom" }) {
-        presetSelector_.Items().Append(box_value(hstring(label)));
+    for (auto const label : { "Basic", "Game experience", "GPU focus", "Power and temperature", "Custom" }) {
+        presetSelector_.Items().Append(box_value(Local(label)));
     }
     auto const selectedPreset = preferences.SelectedPreset.value_or(pmon::ui::core::Preset::Basic);
     presetSelector_.SelectedIndex(selectedPreset == pmon::ui::core::Preset::Custom ? 4 : (int)selectedPreset);
@@ -666,9 +673,7 @@ UIElement MainWindow::BuildOverview()
     layout.Children().Append(pmon::ui::views::FormControls::Heading("Hotkeys"));
     for (auto const action : { pmon::ui::core::HotkeyAction::ToggleCapture,
         pmon::ui::core::HotkeyAction::ToggleOverlay, pmon::ui::core::HotkeyAction::CyclePreset }) {
-        auto const label = action == pmon::ui::core::HotkeyAction::ToggleCapture ? "Start or stop capture"
-            : action == pmon::ui::core::HotkeyAction::ToggleOverlay ? "Show or hide overlay"
-            : "Cycle overlay preset";
+        auto const label = HotkeyActionLabel(action);
         auto const id = action == pmon::ui::core::HotkeyAction::ToggleCapture ? "HotkeyToggleCapture"
             : action == pmon::ui::core::HotkeyAction::ToggleOverlay ? "HotkeyToggleOverlay"
             : "HotkeyCyclePreset";
@@ -762,18 +767,18 @@ IAsyncAction MainWindow::ChooseHotkeyAsync()
     auto const actions = { pmon::ui::core::HotkeyAction::ToggleCapture, pmon::ui::core::HotkeyAction::ToggleOverlay,
         pmon::ui::core::HotkeyAction::CyclePreset };
     ComboBox choice;
-    choice.Items().Append(box_value(L"Start or stop capture"));
-    choice.Items().Append(box_value(L"Show or hide overlay"));
-    choice.Items().Append(box_value(L"Cycle overlay preset"));
+    choice.Items().Append(box_value(Local("Start or stop capture")));
+    choice.Items().Append(box_value(Local("Show or hide overlay")));
+    choice.Items().Append(box_value(Local("Cycle overlay preset")));
     choice.SelectedIndex(0);
     Identify(choice, "HotkeyActionSelector", "Hotkey action");
     ContentDialog dialog;
     dialog.XamlRoot(Root().XamlRoot());
     dialog.RequestedTheme(Root().ActualTheme());
-    dialog.Title(box_value(L"Choose a hotkey"));
+    dialog.Title(box_value(Local("Choose a hotkey")));
     dialog.Content(choice);
-    dialog.PrimaryButtonText(L"Edit");
-    dialog.CloseButtonText(L"Cancel");
+    dialog.PrimaryButtonText(Local("Edit"));
+    dialog.CloseButtonText(Local("Cancel"));
     dialog.DefaultButton(ContentDialogButton::Primary);
     if (co_await dialog.ShowAsync() == ContentDialogResult::Primary) {
         auto iterator = actions.begin();
@@ -814,7 +819,7 @@ IAsyncAction MainWindow::ExportLoadoutAsync()
     picker.SuggestedFileName(L"PresentMon-loadout");
     auto choices = single_threaded_vector<hstring>();
     choices.Append(L".json");
-    picker.FileTypeChoices().Insert(L"PresentMon loadout", choices);
+    picker.FileTypeChoices().Insert(Local("PresentMon loadout"), choices);
     auto initializeWithWindow = picker.as<::IInitializeWithWindow>();
     check_hresult(initializeWithWindow->Initialize(reinterpret_cast<HWND>(windowHandle_)));
     if (auto file = co_await picker.PickSaveFileAsync()) {
@@ -841,20 +846,21 @@ void MainWindow::UpdateState()
     }
     PageContent().IsEnabled(!closing_ && session_->IsReady() && (session_->IsConnected() || section_ == L"About"));
     ConnectionNotice().IsOpen(!session_->IsConnected());
-    ConnectionNotice().Title(session_->IsReady() ? L"PresentMon connection" : L"Connecting");
+    ConnectionNotice().Title(session_->IsReady() ? Local("PresentMon connection") : Local("Connecting"));
     ConnectionNotice().Message(ToHString(session_->ConnectionStatus()));
     ConnectionNotice().Severity(session_->IsReady() ? InfoBarSeverity::Warning : InfoBarSeverity::Informational);
     if (auto selected = session_->SelectedProcess()) ProcessStatus().Text(ToHString(selected->DisplayName()));
-    else if (auto pid = session_->SelectedPid()) ProcessStatus().Text(L"Process " + to_hstring(*pid));
-    else ProcessStatus().Text(L"No application selected");
-    CaptureStatus().Text(session_->Capturing() ? L"Capture: recording" : L"Capture: idle");
+    else if (auto pid = session_->SelectedPid()) ProcessStatus().Text(Local("Process") + hstring(L" ") + to_hstring(*pid));
+    else ProcessStatus().Text(Local("No application selected"));
+    CaptureStatus().Text(session_->Capturing() ? Local("Capture: recording") : Local("Capture: idle"));
     auto const& preferences = session_->Preferences();
-    OverlayStatus().Text(L"Overlay: " + hstring(preferences.HideAlways ? L"hidden" : L"shown")
-        + L"  |  Auto-hide: " + hstring(preferences.HideDuringCapture ? L"on" : L"off"));
-    RateStatus().Text(L"Poll: " + to_hstring(preferences.MetricPollRate) + L" Hz  |  Draw: "
-        + to_hstring(preferences.OverlayDrawRate) + L" FPS");
+    OverlayStatus().Text(Local("Overlay") + hstring(L": ") + Local(preferences.HideAlways ? "hidden" : "shown")
+        + hstring(L"  |  ") + Local("Auto-hide") + hstring(L": ")
+        + Local(preferences.HideDuringCapture ? "StatusOn" : "StatusOff"));
+    RateStatus().Text(Local("Poll") + hstring(L": ") + to_hstring(preferences.MetricPollRate) + hstring(L" Hz  |  ")
+        + Local("Draw") + hstring(L": ") + to_hstring(preferences.OverlayDrawRate) + hstring(L" FPS"));
     if (captureButton_) {
-        captureButton_.Label(session_->Capturing() ? L"Stop capture" : L"Start capture");
+        captureButton_.Label(session_->Capturing() ? Local("Stop capture") : Local("Start capture"));
         captureButton_.Icon(SymbolIcon(session_->Capturing() ? Symbol::Stop : Symbol::Play));
         captureButton_.IsEnabled(session_->IsConnected() && (session_->Capturing() || session_->SelectedPid().has_value()));
     }
@@ -881,7 +887,7 @@ void MainWindow::UpdateState()
 void MainWindow::ShowNotification(std::string const& message)
 {
     if (auto notice = Notice()) {
-        notice.Title(L"PresentMon");
+        notice.Title(Local("PresentMon"));
         notice.Message(ToHString(message));
         notice.IsOpen(true);
     }
@@ -950,7 +956,7 @@ fire_and_forget MainWindow::CloseAsync()
 {
     auto lifetime = get_strong();
     try { co_await session_->CloseAsync(); }
-    catch (std::exception const& error) { ShowNotification(std::string("Unable to finish shutdown: ") + error.what()); }
+    catch (std::exception const& error) { ShowNotification(ToString(Local("Unable to finish shutdown")) + ": " + error.what()); }
     ClearWindowIdentity();
     canClose_ = true;
     pmon::ui::diagnostics::Record("window.close.complete");

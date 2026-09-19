@@ -121,6 +121,8 @@ private:
     std::atomic<bool> captureChanging_ = false;
     std::atomic<uint64_t> revision_ = 0;
     std::atomic<uint64_t> targetRevision_ = 0;
+    uint64_t automaticGeneration_ = 0;
+    bool automaticEnabled_ = false;
     std::atomic<uint64_t> saveGeneration_ = 0;
     std::atomic<uint64_t> captureGeneration_ = 0;
     mutable std::mutex updateMutex_;

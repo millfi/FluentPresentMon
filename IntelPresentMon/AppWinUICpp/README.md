@@ -58,24 +58,19 @@ the blocklist beside its executable for runtime use and installer packaging.
 
 ## Automatic targeting
 
-While enabled, automatic targeting scans about once per second, including when a
-target is already selected. It compares each eligible application's 3D GPU
-running-time increase over the same 100 ms interval. Candidates use the
-visible-window and optional target-blocklist filters. The highest positive GPU
-load wins; equal loads are ordered by PID.
+While enabled, automatic targeting selects the application with the largest sum
+of raw per-frame GPU Busy during each five-second interval. The first interval
+after enabling lasts 200 ms. Totals reset after every selection interval; equal
+positive totals are ordered by PID. A constant positive GPU Busy value also
+contributes, without requiring ten samples or variation.
 
-Scans run sequentially and GPU sampling runs away from the UI thread. Only
-candidates with finite, positive GPU load start raw frame tracking. Idle
-candidates release their prior trackers. No active candidates, or disabling
-automatic targeting, releases the complete probe session. Returning candidates
-must warm up their sample window again before they qualify.
-
-The kernel `ProbeGpuBusy` action uses raw per-frame `PM_METRIC_GPU_BUSY` values
-without averaging or rounding. A candidate qualifies only after ten finite
-samples, with at least one sample different from another. Constant values,
-including all zero, invalid or missing samples, and fewer than ten samples do
-not qualify. The latest Present timestamp must be within two seconds; a longer
-gap resets the sample window.
+Visible-window and optional target-blocklist filters determine candidates.
+Candidates are refreshed about every 250 ms and raw frame queues are consumed
+about every 25 ms away from the UI thread. Polling and IPC can delay selection
+slightly beyond the interval deadline. Tracking starts before the initial
+200 ms interval. Removed candidates release their trackers, and disabling
+automatic targeting releases the complete probe session. Invalid, negative,
+and zero GPU Busy values do not contribute to the total.
 
 If no candidate qualifies, the current selection and an active recording remain
 unchanged. Process exit still clears the target. Enabling automatic targeting

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "KernelProtocol.h"
+#include "../Core/AutomaticTargeting.h"
 
 #include <atomic>
 #include <condition_variable>
@@ -35,7 +36,7 @@ namespace pmon::ui::interop
         void ClearHotkey(int action, std::stop_token cancellation = {});
         void PushSpecification(const core::Specification& specification, std::stop_token cancellation = {});
         void SetCapture(bool active, std::stop_token cancellation = {});
-        std::vector<int> ProbeGpuBusy(const std::vector<int>& pids, std::stop_token cancellation = {});
+        std::vector<core::GpuBusyTotal> ProbeGpuBusy(const std::vector<int>& pids, std::stop_token cancellation = {});
         void SetEtlLogging(bool active, std::stop_token cancellation = {});
         bool WaitEvent(KernelEvent& event, std::stop_token cancellation = {});
         void Close() noexcept;

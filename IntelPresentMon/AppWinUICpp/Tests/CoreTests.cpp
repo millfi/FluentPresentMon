@@ -393,155 +393,39 @@ namespace pmon::ui::tests
             }
         }
 
-        void AutomaticTargetingFollowsEligibleGames()
+        void AutomaticTargetingAccumulatesTimedWindows()
         {
-            constexpr int gameA = 10;
-            constexpr int appB = 20;
-            constexpr int gameC = 30;
-            constexpr int restartedA = 40;
-            std::optional<int> selected = appB;
-            std::vector<int> changes;
-            std::vector<core::GpuProcessSample> samples;
-            std::vector<int> measurable;
-            const auto scan = [&] {
-                AutomaticTargeting::Update([&] { return samples; }, [&](const auto& pids) {
-                    auto expected = samples;
-                    expected.erase(std::remove_if(expected.begin(), expected.end(), [](const auto& sample) {
-                        return !std::isfinite(sample.RunningTime) || sample.RunningTime <= 0.0;
-                    }), expected.end());
-                    std::vector<int> expectedPids;
-                    for (const auto& sample : expected) {
-                        if (std::find(expectedPids.begin(), expectedPids.end(), sample.Pid) == expectedPids.end()) {
-                            expectedPids.push_back(sample.Pid);
-                        }
-                    }
-                    Expect(pids == expectedPids, "Every active candidate must be probed.");
-                    return measurable;
-                }, [] { return true; }, [&](std::optional<int> pid) { selected = pid; changes.push_back(*pid); });
-            };
-
-            samples = { { appB, 100.0 }, { gameA, 50.0 } };
-            measurable = { gameA };
-            scan();
-            Expect(selected == gameA, "A measurable game must replace an unmeasurable foreground process.");
-
-            selected.reset();
-            samples = { { appB, 100.0 } };
-            measurable.clear();
-            scan();
-            Expect(!selected, "An unmeasurable application must not be selected.");
-
-            samples.push_back({ restartedA, 50.0 });
-            measurable.push_back(restartedA);
-            scan();
-            Expect(selected == restartedA, "Restarted games must be reacquired by their new PID.");
-
-            samples.push_back({ gameC, 75.0 });
-            measurable.push_back(gameC);
-            scan();
-            Expect(selected == gameC, "Higher-load eligible games must replace the target.");
-
-            samples = { { restartedA, 90.0 }, { gameC, 75.0 } };
-            scan();
-            Expect(selected == restartedA, "Load changes must be reevaluated on each scan.");
-
-            measurable = { gameC };
-            scan();
-            Expect(selected == gameC && changes.size() == 5,
-                "Only scans with an eligible candidate may request selection.");
+            using namespace std::chrono_literals;
+            AutomaticTargeting targeting;
+            const AutomaticTargeting::Clock::time_point start{};
+            targeting.Start(start);
+            targeting.Add({ { 10, 12. }, { 20, 10. } });
+            targeting.Add({ { 10, 1. }, { 20, 10. } });
+            Expect(!targeting.IsDue(start + 199ms), "Initial selection must wait 200 ms.");
+            Expect(targeting.IsDue(start + 200ms), "Initial selection must be ready at 200 ms.");
+            Expect(targeting.Finish(start + 200ms, { 10, 20 }) == 20,
+                "The sum of GPU Busy must win over a single larger sample.");
+            targeting.Add({ { 10, 3. }, { 20, 1. } });
+            Expect(!targeting.IsDue(start + 5199ms), "Later selections must wait five seconds.");
+            Expect(targeting.IsDue(start + 5200ms), "Later selections must be ready after five seconds.");
+            Expect(targeting.Finish(start + 5200ms, { 10, 20 }) == 10,
+                "Previous interval totals must not leak into the next interval.");
+            targeting.Add({ { 20, 5. }, { 10, 5. }, { 30, 1000. },
+                { 1, std::numeric_limits<double>::quiet_NaN() },
+                { 2, std::numeric_limits<double>::infinity() }, { 3, -1. }, { 4, 0. } });
+            Expect(targeting.Finish(start + 10200ms, { 20, 10, 1, 2, 3, 4 }) == 10,
+                "Exclude removed candidates and invalid values; break ties by PID.");
+            Expect(!targeting.Finish(start + 15200ms, { 10, 20 }),
+                "An empty interval must not request a target change.");
+            targeting.Add({ { 10, 1000. } });
+            targeting.Start(start + 16s);
+            targeting.Add({ { 20, 1. } });
+            Expect(!targeting.IsDue(start + 16199ms) && targeting.IsDue(start + 16200ms),
+                "Re-enabling must use the short initial interval again.");
+            Expect(targeting.Finish(start + 16200ms, { 10, 20 }) == 20,
+                "Re-enabling must discard the previous session's totals.");
         }
 
-        void AutomaticTargetingDiscardsSupersededScans()
-        {
-            for (const auto& stage : { std::string{ "gpu" }, std::string{ "raw" } }) {
-                int revision = 1;
-                int probeCalls = 0;
-                int selectionCalls = 0;
-                AutomaticTargeting::Update([&] {
-                    if (stage == "gpu") {
-                        ++revision;
-                    }
-                    return std::vector<core::GpuProcessSample>{ { 10, 20.0 } };
-                }, [&](const auto&) {
-                    ++probeCalls;
-                    if (stage == "raw") {
-                        ++revision;
-                    }
-                    return std::vector<int>{ 10 };
-                }, [&] { return revision == 1; }, [&](std::optional<int>) { ++selectionCalls; });
-                Expect(selectionCalls == 0, "A stale scan must not select a target.");
-                if (stage == "gpu") {
-                    Expect(probeCalls == 0, "A stale GPU scan must not start raw GPU Busy probing.");
-                }
-            }
-        }
-
-        void AutomaticTargetingRejectsInvalidLoadsAndBreaksTiesByPid()
-        {
-            std::optional<int> selected;
-            AutomaticTargeting::Update([] {
-                return std::vector<core::GpuProcessSample>{
-                    { 1, std::numeric_limits<double>::quiet_NaN() }, { 2, std::numeric_limits<double>::infinity() },
-                    { 3, -1.0 }, { 4, 0.0 }, { 6, 50.0 }, { 5, 50.0 },
-                };
-            }, [](const auto& pids) {
-                Expect(pids == std::vector<int>({ 6, 5 }), "Invalid and inactive loads must not be probed.");
-                return pids;
-            }, [] { return true; }, [&](std::optional<int> pid) { selected = pid; });
-            Expect(selected == 5, "Equal loads must choose the lower PID deterministically.");
-        }
-
-        void AutomaticTargetingReleasesIdleCandidates()
-        {
-            std::optional<int> selected;
-            std::vector<core::GpuProcessSample> samples;
-            for (int pid = 100; pid < 1100; ++pid) {
-                samples.push_back({ pid, 0.0 });
-            }
-            samples.insert(samples.end(), { { 10, 50.0 }, { 20, 100.0 } });
-            std::vector<std::vector<int>> requests;
-            const auto scan = [&] {
-                AutomaticTargeting::Update([&] { return samples; }, [&](const auto& pids) {
-                    requests.push_back(pids);
-                    return pids;
-                }, [] { return true; }, [&](std::optional<int> pid) { selected = pid; });
-            };
-
-            scan();
-            Expect(requests[0] == std::vector<int>({ 10, 20 }) && selected == 20,
-                "Idle applications must not increase the number of frame trackers.");
-            samples = { { 10, 0.0 }, { 20, 0.0 } };
-            scan();
-            Expect(requests[1].empty() && selected == 20,
-                "Idle scans must release probing while retaining the existing target.");
-            samples = { { 10, 50.0 }, { 20, 0.0 } };
-            scan();
-            Expect(requests[2] == std::vector<int>({ 10 }) && selected == 10,
-                "Resumed applications must be offered to the probe again.");
-        }
-
-        void AutomaticTargetingPreservesSelectionWithoutEligibleCandidates()
-        {
-            for (const auto initial : { std::optional<int>{ 10 }, std::optional<int>{} }) {
-                auto selected = initial;
-                int selectionCalls = 0;
-                const std::vector<std::vector<core::GpuProcessSample>> scans = {
-                    { { 10, 50.0 }, { 20, 100.0 } }, { { 10, 50.0 }, { 20, 100.0 } },
-                    { { 10, 0.0 }, { 20, 0.0 } }, {},
-                };
-                for (const auto& samples : scans) {
-                    AutomaticTargeting::Update([&] { return samples; }, [](const auto&) { return std::vector<int>{}; },
-                        [] { return true; }, [&](std::optional<int> pid) { selected = pid; ++selectionCalls; });
-                    Expect(selected == initial && selectionCalls == 0,
-                        "No eligible candidate must preserve selection without invoking capture stop.");
-                }
-                AutomaticTargeting::Update([] { return std::vector<core::GpuProcessSample>{ { 10, 100.0 }, { 20, 50.0 } }; },
-                    [](const auto&) { return std::vector<int>{ 20 }; }, [] { return true; },
-                    [&](std::optional<int> pid) { selected = pid; ++selectionCalls; });
-                Expect(selected == 20 && selectionCalls == 1,
-                    "A newly eligible process must replace an ineligible retained target or fill an empty selection.");
-            }
-        }
     }
 }
 
@@ -560,9 +444,5 @@ int RunCoreTests()
         + RunTest(InvalidDocumentsAreRejected)
         + RunTest(AtomicPersistenceRetainsCorruptOriginalsAndLastValidBackup)
         + RunTest(NativeLaunchArgumentsAreParsedAndUnsupportedArgumentsRejected)
-        + RunTest(AutomaticTargetingFollowsEligibleGames)
-        + RunTest(AutomaticTargetingDiscardsSupersededScans)
-        + RunTest(AutomaticTargetingRejectsInvalidLoadsAndBreaksTiesByPid)
-        + RunTest(AutomaticTargetingReleasesIdleCandidates)
-        + RunTest(AutomaticTargetingPreservesSelectionWithoutEligibleCandidates);
+        + RunTest(AutomaticTargetingAccumulatesTimedWindows);
 }

@@ -162,6 +162,7 @@ winrt::Windows::Foundation::IAsyncAction AppSession::InitializeAsync()
         co_await ResumeOnDispatcher(dispatcher_);
         ThrowIfClosed();
         preferenceFile_ = std::move(preferences);
+        automaticEnabled_ = preferenceFile_.Preferences.EnableAutotargetting;
         if (warning) {
             Notify(*warning);
         }
@@ -502,6 +503,10 @@ void AppSession::Changed()
         return;
     }
     dirty_ = true;
+    if (automaticEnabled_ != preferenceFile_.Preferences.EnableAutotargetting) {
+        automaticEnabled_ = preferenceFile_.Preferences.EnableAutotargetting;
+        ++automaticGeneration_;
+    }
     ++revision_;
     auto const generation = ++saveGeneration_;
     SaveAfterDelayAsync(generation);
@@ -799,12 +804,13 @@ winrt::Windows::Foundation::IAsyncAction AppSession::PollProcessesAsync()
 {
     auto self = shared_from_this();
     co_await winrt::resume_background();
-    auto lastScan = std::chrono::steady_clock::now();
+    core::AutomaticTargeting targeting;
+    uint64_t automaticGeneration = 0;
+    auto nextDiscovery = core::AutomaticTargeting::Clock::time_point{};
+    std::vector<int> candidates;
     bool probeActive = false;
     while (!lifetime_.stop_requested()) {
-        for (int elapsed = 0; elapsed < 250 && !lifetime_.stop_requested(); elapsed += 25) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(25));
-        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
         if (lifetime_.stop_requested()) {
             co_return;
         }
@@ -814,7 +820,8 @@ winrt::Windows::Foundation::IAsyncAction AppSession::PollProcessesAsync()
         }
         auto const automatic = preferenceFile_.Preferences.EnableAutotargetting;
         auto const selected = selectedPid_;
-        auto const scanDue = automatic && std::chrono::steady_clock::now() - lastScan >= std::chrono::seconds(1);
+        auto const restart = automatic && (!probeActive || automaticGeneration != automaticGeneration_);
+        automaticGeneration = automaticGeneration_;
         auto const targetRevision = targetRevision_.load();
         auto const settingsRevision = revision_.load();
         auto const useBlocklist = preferenceFile_.Preferences.EnableTargetBlocklist;
@@ -824,29 +831,26 @@ winrt::Windows::Foundation::IAsyncAction AppSession::PollProcessesAsync()
         co_await winrt::resume_background();
         std::string automaticTargetingError;
         try {
-            if (scanDue && client) {
-                lastScan = std::chrono::steady_clock::now();
-                auto samples = WindowsServices::GetGpuProcessSamples(useBlocklist ? &blocklist : nullptr, token);
-                std::vector<int> active;
-                for (auto const& sample : samples) {
-                    if (std::isfinite(sample.RunningTime) && sample.RunningTime > 0.0) {
-                        active.push_back(sample.Pid);
-                    }
+            if (automatic && client) {
+                if (restart) {
+                    client->ProbeGpuBusy({}, token);
+                    nextDiscovery = {};
                 }
-                std::ranges::sort(active);
-                active.erase(std::unique(active.begin(), active.end()), active.end());
-                auto measurable = client->ProbeGpuBusy(active, token);
-                std::unordered_set<int> measurableSet(measurable.begin(), measurable.end());
-                std::optional<int> best;
-                double bestTime = -1.0;
-                for (auto const& sample : samples) {
-                    if (sample.RunningTime > bestTime && measurableSet.contains(sample.Pid)) {
-                        best = sample.Pid;
-                        bestTime = sample.RunningTime;
-                    } else if (sample.RunningTime == bestTime && best && sample.Pid < *best
-                        && measurableSet.contains(sample.Pid)) {
-                        best = sample.Pid;
+                auto now = core::AutomaticTargeting::Clock::now();
+                if (now >= nextDiscovery) {
+                    candidates.clear();
+                    for (const auto& process : WindowsServices::EnumerateProcesses(useBlocklist ? &blocklist : nullptr, token)) {
+                        candidates.push_back(process.Pid);
                     }
+                    nextDiscovery = now + std::chrono::milliseconds(250);
+                }
+                auto totals = client->ProbeGpuBusy(candidates, token);
+                now = core::AutomaticTargeting::Clock::now();
+                if (restart) targeting.Start(now);
+                targeting.Add(totals);
+                std::optional<int> best;
+                if (targeting.IsDue(now)) {
+                    best = targeting.Finish(now, candidates);
                 }
                 co_await ResumeOnDispatcher(dispatcher_);
                 if (!closed_ && isConnected_ && preferenceFile_.Preferences.EnableAutotargetting

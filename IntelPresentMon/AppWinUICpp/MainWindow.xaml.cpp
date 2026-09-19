@@ -606,7 +606,7 @@ UIElement MainWindow::BuildOverview()
             }
         });
     layout.Children().Append(pmon::ui::views::FormControls::Row("Automatic targeting",
-        "Every second, select the highest-load application whose last 10 raw GPU Busy samples contain a change. Switching targets stops an active capture.", autoTarget_));
+        "Select the application with the largest total GPU Busy over each 5-second interval. The first interval after enabling is 0.2 seconds. Switching targets stops an active capture.", autoTarget_));
 
     showOverlay_ = pmon::ui::views::FormControls::Toggle("ShowOverlay", "Show overlay", !preferences.HideAlways,
         [weak = get_weak()](bool visible) {

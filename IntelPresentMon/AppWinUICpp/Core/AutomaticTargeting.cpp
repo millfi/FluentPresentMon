@@ -2,53 +2,46 @@
 // SPDX-License-Identifier: MIT
 #include "AutomaticTargeting.h"
 
-#include <algorithm>
 #include <cmath>
-#include <unordered_set>
 
 namespace pmon::ui::core
 {
-    void AutomaticTargeting::Update(const Sample& sample, const ProbeGpuBusy& probeGpuBusy,
-        const IsCurrent& isCurrent, const Select& select)
+    void AutomaticTargeting::Start(Clock::time_point now)
     {
-        const auto samples = sample();
-        if (!isCurrent()) {
-            return;
-        }
+        totals_.clear();
+        deadline_ = now + std::chrono::milliseconds(200);
+    }
 
-        std::vector<GpuProcessSample> active;
-        std::vector<int> candidatePids;
-        std::unordered_set<int> seen;
-        for (const auto& entry : samples) {
-            if (std::isfinite(entry.RunningTime) && entry.RunningTime > 0.) {
-                active.push_back(entry);
-                if (seen.insert(entry.Pid).second) {
-                    candidatePids.push_back(entry.Pid);
-                }
+    void AutomaticTargeting::Add(const std::vector<GpuBusyTotal>& samples)
+    {
+        for (const auto& sample : samples) {
+            if (std::isfinite(sample.BusyMilliseconds) && sample.BusyMilliseconds > 0.) {
+                totals_[sample.Pid] += sample.BusyMilliseconds;
             }
-        }
-
-        const auto measurableList = probeGpuBusy(candidatePids);
-        if (!isCurrent()) {
-            return;
-        }
-        const std::unordered_set<int> measurable{ measurableList.begin(), measurableList.end() };
-        const auto top = std::min_element(active.begin(), active.end(), [&measurable](const auto& left, const auto& right) {
-            const auto leftEligible = measurable.contains(left.Pid);
-            const auto rightEligible = measurable.contains(right.Pid);
-            if (leftEligible != rightEligible) {
-                return leftEligible;
-            }
-            if (!leftEligible) {
-                return false;
-            }
-            if (left.RunningTime != right.RunningTime) {
-                return left.RunningTime > right.RunningTime;
-            }
-            return left.Pid < right.Pid;
-        });
-        if (top != active.end() && measurable.contains(top->Pid)) {
-            select(top->Pid);
         }
     }
+
+    bool AutomaticTargeting::IsDue(Clock::time_point now) const
+    {
+        return now >= deadline_;
+    }
+
+    std::optional<int> AutomaticTargeting::Finish(Clock::time_point now, const std::vector<int>& candidates)
+    {
+        std::optional<int> best;
+        double bestTotal = 0.;
+        for (const auto pid : candidates) {
+            const auto found = totals_.find(pid);
+            if (found == totals_.end()) continue;
+            const auto total = found->second;
+            if (total > bestTotal || (total == bestTotal && best && pid < *best)) {
+                best = pid;
+                bestTotal = total;
+            }
+        }
+        totals_.clear();
+        deadline_ = now + std::chrono::seconds(5);
+        return best;
+    }
+
 }

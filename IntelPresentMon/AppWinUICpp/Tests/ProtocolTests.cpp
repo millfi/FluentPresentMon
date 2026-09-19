@@ -9,6 +9,7 @@
 #include "../Interop/KernelProtocol.h"
 
 #include <array>
+#include <bit>
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -288,7 +289,11 @@ namespace pmon::ui::tests
                 const auto pids = probe.Payload.List<uint32_t>([&probe] { return probe.Payload.UInt32(); }, 4);
                 Expect(pids == std::vector<uint32_t>{ 123, 456 }, "ProbeGpuBusy payload changed.");
                 probe.Payload.RequireEnd();
-                Reply(probe.Header, [](CerealWriter& writer) { writer.List(std::vector<uint32_t>{ 456 }, [&writer](uint32_t pid) { writer.UInt32(pid); }); });
+                Reply(probe.Header, [](CerealWriter& writer) {
+                    writer.UInt64(1);
+                    writer.UInt32(456);
+                    writer.UInt64(std::bit_cast<uint64_t>(123.5));
+                });
 
                 auto releaseProbe = Request("ProbeGpuBusy");
                 const auto released = releaseProbe.Payload.List<uint32_t>([&releaseProbe] { return releaseProbe.Payload.UInt32(); }, 4);
@@ -518,7 +523,9 @@ namespace pmon::ui::tests
             client->BindHotkey(binding);
             client->ClearHotkey(2);
             client->SetEtlLogging(false);
-            Expect(client->ProbeGpuBusy({ 123, 456 }) == std::vector<int>{ 456 }, "ProbeGpuBusy response changed.");
+            const auto totals = client->ProbeGpuBusy({ 123, 456 });
+            Expect(totals.size() == 1 && totals[0].Pid == 456 && totals[0].BusyMilliseconds == 123.5,
+                "ProbeGpuBusy totals response changed.");
             Expect(client->ProbeGpuBusy({}).empty(), "Empty ProbeGpuBusy response changed.");
             server.Join();
             for (const auto kind : { KernelEventKind::HotkeyFired, KernelEventKind::TargetLost,

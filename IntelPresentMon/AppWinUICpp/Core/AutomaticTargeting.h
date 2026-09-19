@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 
-#include <functional>
+#include <chrono>
+#include <unordered_map>
 #include <optional>
 #include <vector>
 
@@ -14,15 +15,23 @@ namespace pmon::ui::core
         double RunningTime;
     };
 
+    struct GpuBusyTotal
+    {
+        int Pid;
+        double BusyMilliseconds;
+    };
+
     class AutomaticTargeting
     {
     public:
-        using Sample = std::function<std::vector<GpuProcessSample>()>;
-        using ProbeGpuBusy = std::function<std::vector<int>(const std::vector<int>&)>;
-        using IsCurrent = std::function<bool()>;
-        using Select = std::function<void(std::optional<int>)>;
+        using Clock = std::chrono::steady_clock;
+        void Start(Clock::time_point now);
+        void Add(const std::vector<GpuBusyTotal>& samples);
+        bool IsDue(Clock::time_point now) const;
+        std::optional<int> Finish(Clock::time_point now, const std::vector<int>& candidates);
 
-        static void Update(const Sample& sample, const ProbeGpuBusy& probeGpuBusy,
-            const IsCurrent& isCurrent, const Select& select);
+    private:
+        Clock::time_point deadline_{};
+        std::unordered_map<int, double> totals_;
     };
 }

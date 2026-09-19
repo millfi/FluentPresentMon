@@ -26,8 +26,8 @@ namespace ACT_NS
         };
         struct Response
         {
-            std::vector<uint32_t> pids;
-            template<class A> void serialize(A& ar) { ar(pids); }
+            std::vector<GpuBusyTotal> totals;
+            template<class A> void serialize(A& ar) { ar(totals); }
         };
     private:
         friend class ACT_TYPE<ACT_NAME, ACT_EXEC_CTX>;

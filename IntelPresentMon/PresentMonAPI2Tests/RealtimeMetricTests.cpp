@@ -118,15 +118,21 @@ namespace RealtimeMetricTests
                 const auto deadline = std::chrono::steady_clock::now() + 10s;
                 do {
                     const auto candidates = probe.Poll({ appB, game });
-                    Assert::IsFalse(std::ranges::contains(candidates, appB), L"A non-presenting process qualified for GPU Busy variation");
-                    if (std::ranges::contains(candidates, game)) return;
+                    Assert::IsFalse(std::ranges::any_of(candidates, [appB](const auto& sample) {
+                        return sample.pid == appB && sample.busyMilliseconds > 0.;
+                    }), L"A non-presenting process contributed GPU Busy");
+                    if (std::ranges::any_of(candidates, [game](const auto& sample) {
+                        return sample.pid == game && sample.busyMilliseconds > 0.;
+                    })) return;
                     std::this_thread::sleep_for(100ms);
                 } while (std::chrono::steady_clock::now() < deadline);
-                Assert::Fail(L"Rendering process did not produce ten changing raw GPU Busy samples");
+                Assert::Fail(L"Rendering process did not produce positive raw GPU Busy totals");
             };
 
             waitForGame(gameA);
-            Assert::IsTrue(probe.Poll({ appB }).empty(), L"Raw samples from A leaked into B's eligibility");
+            Assert::IsFalse(std::ranges::any_of(probe.Poll({ appB }), [](const auto& sample) {
+                return sample.busyMilliseconds > 0.;
+            }), L"Raw samples from A leaked into B's total");
             Assert::IsTrue(probe.Poll({}).empty(), L"Empty candidate set did not release probe tracking");
 
             PM_BEGIN_FIXED_DYNAMIC_QUERY(OverlayQuery)
@@ -143,7 +149,10 @@ namespace RealtimeMetricTests
             waitForGame(gameA);
             presenter.Murder();
             std::this_thread::sleep_for(2200ms);
-            Assert::IsTrue(probe.Poll({ appB, gameA }).empty(), L"Stale raw samples kept an exited game eligible");
+            probe.Poll({ appB, gameA }); // Drain any frames queued before exit.
+            Assert::IsFalse(std::ranges::any_of(probe.Poll({ appB, gameA }), [](const auto& sample) {
+                return sample.busyMilliseconds > 0.;
+            }), L"Consumed raw samples contributed more than once");
             auto restarted = LaunchPresenter_(fixture_);
             waitForGame(restarted.GetId());
             auto gameC = LaunchPresenter_(fixture_);

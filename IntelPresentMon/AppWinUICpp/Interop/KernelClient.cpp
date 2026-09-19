@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <chrono>
 #include <format>
 #include <limits>
@@ -133,24 +134,24 @@ namespace pmon::ui::interop
         Request("SetCapture", [active](CerealWriter& writer) { writer.Bool(active); }, [](CerealReader&) {}, cancellation);
     }
 
-    std::vector<int> KernelClient::ProbeGpuBusy(const std::vector<int>& pids, std::stop_token cancellation)
+    std::vector<core::GpuBusyTotal> KernelClient::ProbeGpuBusy(const std::vector<int>& pids, std::stop_token cancellation)
     {
         for (const auto pid : pids) {
             if (pid < 0) {
                 throw std::out_of_range("Candidate process ID cannot be negative.");
             }
         }
-        std::vector<int> result;
+        std::vector<core::GpuBusyTotal> result;
         Request("ProbeGpuBusy", [&pids](CerealWriter& writer) {
             writer.List(pids, [&writer](int pid) { writer.UInt32((uint32_t)pid); });
         }, [&result](CerealReader& reader) {
-            result = reader.List<int>([&reader] {
+            result = reader.List<core::GpuBusyTotal>([&reader] {
                 const auto pid = reader.UInt32();
                 if (pid > (uint32_t)std::numeric_limits<int>::max()) {
                     throw ProtocolError("GPU Busy result process ID does not fit in an int.");
                 }
-                return (int)pid;
-            }, sizeof(uint32_t));
+                return core::GpuBusyTotal{ (int)pid, std::bit_cast<double>(reader.UInt64()) };
+            }, sizeof(uint32_t) + sizeof(double));
         }, cancellation);
         return result;
     }

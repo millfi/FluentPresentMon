@@ -43,7 +43,9 @@ try {
     Set-Location $repoRoot
     if (-not $VisualStudioPath) {
         $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
-        $VisualStudioPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        $candidates = @(& $vswhere -all -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)
+        $withWinStore = @($candidates | Where-Object { Test-Path -LiteralPath (Join-Path $_ "MSBuild\Microsoft\VC\v180\Application Type\Windows Store") })
+        $VisualStudioPath = if ($withWinStore.Count -gt 0) { $withWinStore[0] } elseif ($candidates.Count -gt 0) { $candidates[0] } else { $null }
     }
     if (-not $VisualStudioPath) {
         throw "Install Visual Studio with the Desktop development with C++ workload."
@@ -91,11 +93,6 @@ try {
     # Normalize the environment key casing before launching .NET Framework MSBuild.
     Remove-Item Env:PATH -ErrorAction SilentlyContinue
     $env:Path = $originalExecutablePath
-    $identityArguments = @(
-        "/m:1", "/nr:false", "/nologo", "/verbosity:minimal", "/p:Configuration=$nativeConfiguration", "/p:Platform=x64",
-        "/p:PlatformToolset=$PlatformToolset", "/p:SolutionDir=$repoRoot\"
-    )
-    Invoke-Checked $msbuild (@("IntelPresentMon\PMInstaller\MsixIdentity.vcxproj") + $identityArguments)
     $nativeArguments = @(
         "/m:4", "/nr:false", "/nologo", "/verbosity:minimal", "/p:CL_MPCount=4", "/p:Configuration=$nativeConfiguration", "/p:Platform=x64",
         "/p:PlatformToolset=$PlatformToolset",

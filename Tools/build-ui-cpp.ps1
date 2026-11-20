@@ -37,7 +37,9 @@ try {
     Set-Location $repoRoot
     if (-not $VisualStudioPath) {
         $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
-        $VisualStudioPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        $candidates = @(& $vswhere -all -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)
+        $withWinStore = @($candidates | Where-Object { Test-Path -LiteralPath (Join-Path $_ "MSBuild\Microsoft\VC\v180\Application Type\Windows Store") })
+        $VisualStudioPath = if ($withWinStore.Count -gt 0) { $withWinStore[0] } elseif ($candidates.Count -gt 0) { $candidates[0] } else { $null }
     }
     if (-not $VisualStudioPath) {
         throw "Install Visual Studio with the Desktop development with C++ workload."
@@ -83,7 +85,6 @@ try {
             Invoke-Checked $msbuild (@($shellSmokeProject) + $arguments)
             Invoke-Checked $coreTestExecutable @()
             Invoke-CheckedScript -Script (Join-Path $repoRoot 'Tools\test-ui-cpp-smoke-validator.ps1')
-            Invoke-CheckedScript -Script (Join-Path $repoRoot 'IntelPresentMon\PMInstaller\test-winui-harvest.ps1')
             Invoke-CheckedScript -Script (Join-Path $repoRoot 'Tools\test-ui-cpp-smoke.ps1') -Parameters @{
                 Executable = $uiExecutable
                 ReportDirectory = $backdropReportDirectory

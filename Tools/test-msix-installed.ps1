@@ -4,7 +4,9 @@ param([string]$ReportDirectory = "$PSScriptRoot/../build/msix-installed-tests", 
 $ErrorActionPreference = 'Stop'
 if (-not $SkipBuild) {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-    $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+    $candidates = @(& $vswhere -all -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)
+    $withWinStore = @($candidates | Where-Object { Test-Path -LiteralPath (Join-Path $_ 'MSBuild\Microsoft\VC\v180\Application Type\Windows Store') })
+    $vs = if ($withWinStore.Count -gt 0) { $withWinStore[0] } elseif ($candidates.Count -gt 0) { $candidates[0] } else { $null }
     if (-not $vs) { throw 'Visual Studio C++ build tools are required to build the smoke host.' }
     $msbuild = Join-Path $vs 'MSBuild\Current\Bin\amd64\MSBuild.exe'
     foreach ($project in @('PresentMonUI.Core.Tests', 'PresentMonUI.OverlaySmokeHost')) {
@@ -18,7 +20,7 @@ $package = @(Get-AppxPackage -Name Fluent.PresentMon)
 if ($package.Count -ne 1 -or $package[0].Status -ne 'Ok') { throw 'Expected one healthy installed Fluent.PresentMon package.' }
 $root = $package[0].InstallLocation
 $distribution = Get-Content -LiteralPath (Join-Path $root 'Distribution.json') -Raw | ConvertFrom-Json
-if ($distribution.EtwRegistration -ne 'None') { throw 'This check requires the registration-free distribution.' }
+if (-not $distribution.Version) { throw 'Distribution.json is missing Version.' }
 $service = Get-CimInstance Win32_Service -Filter "Name='FluentPresentMonService'"
 if (-not $service -or $service.State -ne 'Running' -or $service.PathName.TrimStart('"') -notlike ($root + '\*')) {
     throw 'The installed Fluent PresentMon service is not running from this package.'

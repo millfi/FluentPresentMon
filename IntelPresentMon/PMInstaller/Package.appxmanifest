@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-         xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"
          xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
          xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
          xmlns:desktop6="http://schemas.microsoft.com/appx/manifest/desktop/windows10/6"
-         xmlns:desktop7="http://schemas.microsoft.com/appx/manifest/desktop/windows10/7"
-         xmlns:desktop8="http://schemas.microsoft.com/appx/manifest/desktop/windows10/8"
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-         IgnorableNamespaces="uap uap4 uap5 uap10 desktop6 desktop7 desktop8 rescap">
-  <Identity Name="Fluent.PresentMon" Publisher="CN=PresentMon" Version="0.0.0.0" ProcessorArchitecture="x64" />
+         IgnorableNamespaces="uap uap5 uap10 desktop6 rescap">
+  <Identity Name="Fluent.PresentMon" Publisher="CN=Fluent PresentMon" Version="0.0.0.0" ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>Fluent PresentMon</DisplayName>
-    <PublisherDisplayName>Intel Corporation</PublisherDisplayName>
+    <PublisherDisplayName>Fluent PresentMon</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <desktop6:RegistryWriteVirtualization>disabled</desktop6:RegistryWriteVirtualization>
     <desktop6:FileSystemWriteVirtualization>disabled</desktop6:FileSystemWriteVirtualization>
   </Properties>
-  <Resources><Resource Language="en-us" /></Resources>
+  <Resources>
+    <Resource Language="en-us" />
+    <Resource Language="ja-jp" />
+  </Resources>
   <Dependencies>
-    <!-- ETW provider registration through desktop8 requires Windows 11. -->
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.22000.0" MaxVersionTested="10.0.26100.0" />
-    <!-- Framework identities and minimum versions are read from the signed redistributables. -->
+    <!-- Framework identities and minimum versions are populated from the signed redistributables. -->
   </Dependencies>
   <Applications>
     <Application Id="PresentMon" Executable="PresentMon.exe" uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL" uap10:SupportsMultipleInstances="true">
@@ -46,14 +45,6 @@
       </Extensions>
     </Application>
   </Applications>
-  <Extensions>
-    <desktop8:Extension Category="windows.eventTracing" desktop7:Scope="machine" desktop7:CompatMode="classic">
-      <desktop8:EventTracing>
-        <desktop8:Provider Id="00000000-0000-0000-0000-000000000000" Name="Intel-PresentMon"
-                           ResourceFile="Provider\Intel-PresentMon.dll" MessageFile="Provider\Intel-PresentMon.dll" />
-      </desktop8:EventTracing>
-    </desktop8:Extension>
-  </Extensions>
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
     <rescap:Capability Name="allowElevation" />
@@ -61,7 +52,5 @@
     <rescap:Capability Name="localSystemServices" />
     <rescap:Capability Name="unvirtualizedResources" />
     <rescap:Capability Name="uiAccess" />
-    <uap4:CustomCapability Name="Microsoft.classicAppCompat_8wekyb3d8bbwe" />
-    <uap4:CustomCapability Name="Microsoft.classicAppCompatElevated_8wekyb3d8bbwe" />
   </Capabilities>
 </Package>

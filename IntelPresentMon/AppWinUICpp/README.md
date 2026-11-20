@@ -28,8 +28,8 @@ WinUI, DirectML or ONNX Runtime binaries into the app package.
 
 The core checks are built as
 `build\Debug\ui-tests\PresentMonUI.Core.Tests.exe`. `-RunTests` runs the native
-core and protocol checks, backdrop smoke, shell smoke, and installer-harvest
-validator checks. `build-capture-app.ps1 -RunNativeTests` additionally runs the
+core and protocol checks, backdrop smoke, and shell smoke checks.
+`build-capture-app.ps1 -RunNativeTests` additionally runs the
 real overlay host after building the staged kernel and API. It uses a generated
 child-service session, isolated UI data and logs, and a PresentBench target;
 the Basic overlay must remain visible for five seconds. The project also

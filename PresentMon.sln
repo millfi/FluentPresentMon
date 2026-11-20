@@ -6,7 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSIX Installer", "MSIX Inst
 	ProjectSection(SolutionItems) = preProject
 		Tools\build-installer.ps1 = Tools\build-installer.ps1
 		IntelPresentMon\PMInstaller\Package.appxmanifest = IntelPresentMon\PMInstaller\Package.appxmanifest
-		IntelPresentMon\PMInstaller\package-msix.ps1 = IntelPresentMon\PMInstaller\package-msix.ps1
 		IntelPresentMon\PMInstaller\Install.ps1 = IntelPresentMon\PMInstaller\Install.ps1
 		IntelPresentMon\PMInstaller\README.md = IntelPresentMon\PMInstaller\README.md
 	EndProjectSection
@@ -76,8 +75,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Versioning", "IntelPresentMon\Versioning\Versioning.vcxproj", "{C73AA532-E532-4D93-9279-905444653C08}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reflector", "Reflector\Reflector.vcxproj", "{5805A705-ADB3-4888-A244-4AAB86A1005D}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PresentMonMsixIdentity", "IntelPresentMon\PMInstaller\MsixIdentity.vcxproj", "{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{AE6C0AE0-2EEF-4590-BAE8-5888B89E22C5}"
 EndProject
@@ -285,15 +282,6 @@ Global
 		{5805A705-ADB3-4888-A244-4AAB86A1005D}.Release-EDSS|x64.ActiveCfg = Release|x64
 		{5805A705-ADB3-4888-A244-4AAB86A1005D}.Release-EDSS|x64.Build.0 = Release|x64
 		{5805A705-ADB3-4888-A244-4AAB86A1005D}.Release-EDSS|x86.ActiveCfg = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Debug|x64.ActiveCfg = Debug|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Debug|x64.Build.0 = Debug|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Debug|x86.ActiveCfg = Debug|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release|x64.ActiveCfg = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release|x64.Build.0 = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release|x86.ActiveCfg = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release-EDSS|x64.ActiveCfg = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release-EDSS|x64.Build.0 = Release|x64
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1}.Release-EDSS|x86.ActiveCfg = Release|x64
 		{F9BD47F5-4AA3-4BA3-91F2-2AC7B270299C}.Debug|x64.ActiveCfg = Debug|x64
 		{F9BD47F5-4AA3-4BA3-91F2-2AC7B270299C}.Debug|x64.Build.0 = Debug|x64
 		{F9BD47F5-4AA3-4BA3-91F2-2AC7B270299C}.Debug|x86.ActiveCfg = Debug|x64
@@ -340,7 +328,6 @@ Global
 		{F9BD47F5-4AA3-4BA3-91F2-2AC7B270299C} = {AE6C0AE0-2EEF-4590-BAE8-5888B89E22C5}
 		{8F86D067-2437-46FC-8F82-4D7155CECED7} = {6DCB803B-9FCE-456C-87B9-1365F59BD190}
 		{5805A705-ADB3-4888-A244-4AAB86A1005D} = {B4CC5828-9638-42EC-A692-E81E8227DD84}
-		{F3C3E6D3-3E58-4C54-8D36-3B11E4B0C0A1} = {61877103-313D-4140-8449-834D5D73C72E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {485BBDCE-E37E-4C3F-A336-A96029B45E1B}

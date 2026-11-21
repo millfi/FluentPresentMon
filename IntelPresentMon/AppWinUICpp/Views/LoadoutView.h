@@ -46,8 +46,15 @@ namespace pmon::ui::views
         using Grid = winrt::Microsoft::UI::Xaml::Controls::Grid;
         using NumberBox = winrt::Microsoft::UI::Xaml::Controls::NumberBox;
 
+        struct FieldItem
+        {
+            UIElement Element{ nullptr };
+            double Weight = 1.0;
+        };
+
         UIElement BuildWidget(const std::shared_ptr<core::Widget>& widget);
-        UIElement BuildSeries(const std::shared_ptr<core::Widget>& widget, int lineKey, int lineIndex);
+        UIElement BuildSeries(const std::shared_ptr<core::Widget>& widget, int lineKey, int lineIndex,
+            std::vector<FieldItem> leadingFields = {}, UIElement trailingAppearance = nullptr);
         UIElement BuildDetails(const std::shared_ptr<core::Widget>& widget);
         UIElement BuildRange(const std::shared_ptr<core::Widget>& owner, const std::string& id,
             const std::string& title, const std::string& description, std::vector<double> values,
@@ -79,6 +86,7 @@ namespace pmon::ui::views
 
         static UIElement Field(const std::string& label, const UIElement& control);
         static Grid Fields(const std::vector<UIElement>& content, int maximumColumns);
+        static Grid Fields(const std::vector<FieldItem>& content, int maximumColumns, double minColumnWidth = 160.0);
         static winrt::Windows::UI::Color ToColor(const core::RgbaColor& color);
         static core::RgbaColor FromColor(winrt::Windows::UI::Color color);
 

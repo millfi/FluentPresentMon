@@ -4,7 +4,7 @@ Fluent PresentMon は、Windows 11（ビルド 22000 以降）向けの x64 MSIX
 
 ## 前提条件
 
-- Visual Studio 2026 18.7 以降（C++ によるデスクトップ開発および Windows SDK 10.0.26100 を含む）
+- Visual Studio 2026 18.7 以降（Community / Professional / Enterprise）または Visual Studio Build Tools 2026 18.7 以降（C++ によるデスクトップ開発および Windows SDK 10.0.26100 を含む）
 - `winapp` CLI:
   ```powershell
   winget install Microsoft.winappcli --source winget
@@ -35,6 +35,8 @@ MSIX をビルド、パッケージ化、および署名します（`PresentMon.
 - `-CertPassword <pwd>`: PFX パスワード（デフォルト: `password`、`winapp cert generate` の既定値と一致）
 - `-TimestampUrl <url>`: 本番署名用に RFC 3161 タイムスタンプを付与します
 - `-RunNativeTests`: パッケージ化前にネイティブのキャプチャおよびオーバーレイテストを実行します
+- `-VisualStudioPath <path>`: 使用する Visual Studio 2026 または Visual Studio Build Tools 2026 のインストール先を明示指定します（省略時は `Windows Store` C++ ターゲットを備えたインストールを優先して自動検出し、その環境の `vcvarsall.bat amd64` 上で `vcpkg install` を実行します）
+- `-VcpkgRoot <path>`: `vcpkg.exe` を含むディレクトリを明示指定します（省略時は `VCPKG_ROOT`、選択された Visual Studio 内の `VC\vcpkg`、`PATH` 上の `vcpkg.exe`、他のインストール済み Visual Studio の順で自動解決します）
 
 ### 2. 未署名検証ビルド
 

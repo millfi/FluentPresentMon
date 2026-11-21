@@ -4,7 +4,7 @@ Fluent PresentMon is distributed exclusively as an x64 MSIX package for Windows 
 
 ## Prerequisites
 
-- Visual Studio 2026 18.7 or newer with Desktop development with C++ and Windows SDK 10.0.26100
+- Visual Studio 2026 18.7 or newer (Community/Professional/Enterprise) or Visual Studio Build Tools 2026 18.7 or newer with Desktop development with C++ and Windows SDK 10.0.26100
 - `winapp` CLI:
   ```powershell
   winget install Microsoft.winappcli --source winget
@@ -35,6 +35,8 @@ Useful options:
 - `-CertPassword <pwd>`: PFX password (default: `password`, matching `winapp cert generate`)
 - `-TimestampUrl <url>`: add RFC 3161 timestamping for production signing
 - `-RunNativeTests`: run native capture and overlay tests before packaging
+- `-VisualStudioPath <path>`: explicitly select a Visual Studio 2026 or Visual Studio Build Tools 2026 installation (otherwise auto-detected, preferring installations with `Windows Store` C++ targets; `vcpkg install` runs inside that installation's `vcvarsall.bat amd64` environment)
+- `-VcpkgRoot <path>`: explicitly select the directory containing `vcpkg.exe` (otherwise auto-resolved from `VCPKG_ROOT`, the selected Visual Studio's `VC\vcpkg`, `PATH`, or another installed Visual Studio instance)
 
 ### 2. Unsigned validation build
 

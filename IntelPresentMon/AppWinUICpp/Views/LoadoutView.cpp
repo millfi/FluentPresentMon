@@ -75,9 +75,12 @@ namespace pmon::ui::views
             const std::function<void()>& action, bool enabled = true)
         {
             Button button;
-            button.Content(SymbolIcon{ icon });
+            SymbolIcon glyph{ icon };
+            button.Content(glyph);
             button.IsEnabled(enabled);
-            button.Padding(Thickness{ 8.0, 8.0, 8.0, 8.0 });
+            button.Padding(Thickness{ 5.0, 4.0, 5.0, 4.0 });
+            button.MinHeight(24.0);
+            button.MinWidth(28.0);
             AutomationProperties::SetAutomationId(button, Text(id));
             AutomationProperties::SetName(button, Text(name));
             ToolTipService::SetToolTip(button, box_value(Text(name)));
@@ -92,9 +95,12 @@ namespace pmon::ui::views
             FontIcon icon;
             icon.Glyph(glyph);
             icon.FontFamily(FontFamily{ L"Segoe Fluent Icons" });
+            icon.FontSize(12.0);
             button.Content(icon);
             button.IsEnabled(enabled);
-            button.Padding(Thickness{ 8.0, 8.0, 8.0, 8.0 });
+            button.Padding(Thickness{ 5.0, 4.0, 5.0, 4.0 });
+            button.MinHeight(24.0);
+            button.MinWidth(28.0);
             AutomationProperties::SetAutomationId(button, Text(id));
             AutomationProperties::SetName(button, Text(name));
             ToolTipService::SetToolTip(button, box_value(Text(name)));
@@ -217,7 +223,7 @@ namespace pmon::ui::views
         list_.AllowDrop(true);
         list_.SelectionMode(ListViewSelectionMode::None);
         list_.HorizontalContentAlignment(HorizontalAlignment::Stretch);
-        list_.Padding(Thickness{ 0.0, 0.0, 12.0, 16.0 });
+        list_.Padding(Thickness{ 0.0, 0.0, 12.0, 12.0 });
         ScrollViewer::SetHorizontalScrollMode(list_, ScrollMode::Disabled);
         ScrollViewer::SetHorizontalScrollBarVisibility(list_, ScrollBarVisibility::Disabled);
         AutomationProperties::SetAutomationId(list_, L"WidgetList");
@@ -287,17 +293,17 @@ namespace pmon::ui::views
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" />
             )").as<Border>();
-        card.Padding(Thickness{ 16.0, 16.0, 16.0, 16.0 });
-        card.CornerRadius(CornerRadius{ 8.0 });
+        card.Padding(Thickness{ 10.0, 6.0, 10.0, 6.0 });
+        card.CornerRadius(CornerRadius{ 6.0 });
         card.BorderThickness(Thickness{ 1.0, 1.0, 1.0, 1.0 });
         card.HorizontalAlignment(HorizontalAlignment::Stretch);
-        card.Margin(Thickness{ 0.0, 0.0, 0.0, 10.0 });
+        card.Margin(Thickness{ 0.0, 0.0, 0.0, 4.0 });
         card.Tag(box_value((int32_t)widget->Key));
 
         StackPanel content;
-        content.Spacing(14.0);
+        content.Spacing(4.0);
         Grid header;
-        header.ColumnSpacing(12.0);
+        header.ColumnSpacing(8.0);
         header.ColumnDefinitions().Append(StarColumn());
         header.ColumnDefinitions().Append(AutoColumn());
         TextBlock title;
@@ -305,7 +311,7 @@ namespace pmon::ui::views
         const auto position = std::find(widgets.begin(), widgets.end(), widget);
         const auto index = position == widgets.end() ? 0 : (int)(position - widgets.begin()) + 1;
         title.Text(Text(std::to_string(index) + ". " + to_string(Text(WidgetTitle(*widget)))));
-        title.FontSize(18.0);
+        title.FontSize(14.0);
         title.FontWeight(Microsoft::UI::Text::FontWeights::SemiBold());
         title.TextTrimming(TextTrimming::CharacterEllipsis);
         title.VerticalAlignment(VerticalAlignment::Center);
@@ -329,12 +335,12 @@ namespace pmon::ui::views
             typeChoices.push_back("Graph");
         }
         const auto isGraph = widget->GetWidgetType() == core::WidgetType::Graph;
-        std::vector<UIElement> typeFields;
-        typeFields.push_back(Field("Widget type", FormControls::Choice("WidgetType_" + std::to_string(widget->Key), "Widget type",
+        std::vector<FieldItem> typeFields;
+        typeFields.push_back({ Field("Widget type", FormControls::Choice("WidgetType_" + std::to_string(widget->Key), "Widget type",
             typeChoices, isGraph ? (int)typeChoices.size() - 1 : 0,
-            [this, widget, typeChoices](int selection) { ChangeType(widget, typeChoices[(size_t)selection] == "Graph"); })));
+            [this, widget, typeChoices](int selection) { ChangeType(widget, typeChoices[(size_t)selection] == "Graph"); })), 1.0 });
         if (const auto graph = std::dynamic_pointer_cast<core::Graph>(widget)) {
-            typeFields.push_back(Field("Graph type", FormControls::Choice("GraphType_" + std::to_string(widget->Key), "Graph type",
+            typeFields.push_back({ Field("Graph type", FormControls::Choice("GraphType_" + std::to_string(widget->Key), "Graph type",
                 { "Line", "Histogram" }, graph->GraphType.Name == "Histogram" ? 1 : 0,
                 [this, widget](int selection) {
                     const auto graph = std::dynamic_pointer_cast<core::Graph>(widget);
@@ -343,13 +349,10 @@ namespace pmon::ui::views
                     if (selection == 1 && graph->Metrics.size() > 1) graph->Metrics.erase(graph->Metrics.begin() + 1, graph->Metrics.end());
                     NotifyChanged();
                     Refresh();
-                })));
+                })), 1.0 });
         }
-        content.Children().Append(Fields(typeFields, 2));
 
-        for (size_t lineIndex = 0; lineIndex < widget->Metrics.size(); ++lineIndex) {
-            content.Children().Append(BuildSeries(widget, widget->Metrics[lineIndex].Key, (int)lineIndex));
-        }
+        UIElement addSeriesButton{ nullptr };
         if (const auto graph = std::dynamic_pointer_cast<core::Graph>(widget); graph && graph->GraphType.Name == "Line") {
             auto add = FormControls::ActionButton("AddSeries_" + std::to_string(widget->Key), "Add metric series", [this, widget] {
                 const auto* metric = DefaultMetric(true);
@@ -361,15 +364,42 @@ namespace pmon::ui::views
                 Refresh();
             });
             add.HorizontalAlignment(HorizontalAlignment::Left);
+            add.VerticalAlignment(VerticalAlignment::Bottom);
             add.IsEnabled(std::any_of(session_->Introspection().Metrics.begin(), session_->Introspection().Metrics.end(),
                 [](const auto& metric) { return metric.Numeric; }));
-            content.Children().Append(add);
+            addSeriesButton = add;
         }
 
-        Expander details;
-        details.Header(box_value(Text(isGraph ? "Graph settings" : "Readout settings")));
-        details.HorizontalAlignment(HorizontalAlignment::Stretch);
-        details.HorizontalContentAlignment(HorizontalAlignment::Stretch);
+        if (widget->Metrics.empty()) {
+            content.Children().Append(Fields(typeFields, (int)typeFields.size()));
+            if (addSeriesButton) content.Children().Append(addSeriesButton);
+        }
+        else {
+            for (size_t lineIndex = 0; lineIndex < widget->Metrics.size(); ++lineIndex) {
+                content.Children().Append(BuildSeries(widget, widget->Metrics[lineIndex].Key, (int)lineIndex,
+                    lineIndex == 0 ? std::move(typeFields) : std::vector<FieldItem>{},
+                    lineIndex == 0 ? addSeriesButton : nullptr));
+            }
+        }
+
+        auto details = Microsoft::UI::Xaml::Markup::XamlReader::Load(LR"(
+            <Expander xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                MinHeight="28"
+                Padding="10,6,10,6">
+                <Expander.Resources>
+                    <x:Double x:Key="ExpanderMinHeight">28</x:Double>
+                    <Thickness x:Key="ExpanderHeaderPadding">10,0,0,0</Thickness>
+                    <Thickness x:Key="ExpanderContentPadding">10,6,10,6</Thickness>
+                </Expander.Resources>
+            </Expander>
+            )").as<Expander>();
+        TextBlock detailsHeader;
+        detailsHeader.Text(Text(isGraph ? "Graph settings" : "Readout settings"));
+        detailsHeader.FontSize(12.0);
+        details.Header(detailsHeader);
         details.IsExpanded(expandedWidgets_.contains(widget->Key));
         AutomationProperties::SetAutomationId(details, Text("Details_" + std::to_string(widget->Key)));
         details.Expanding([this, details, widget](auto const&, auto const&) {
@@ -383,12 +413,13 @@ namespace pmon::ui::views
         return card;
     }
 
-    UIElement LoadoutView::BuildSeries(const std::shared_ptr<core::Widget>& widget, int lineKey, int lineIndex)
+    UIElement LoadoutView::BuildSeries(const std::shared_ptr<core::Widget>& widget, int lineKey, int lineIndex,
+        std::vector<FieldItem> leadingFields, UIElement trailingAppearance)
     {
         auto* line = FindLine(widget, lineKey);
         if (!line) return TextBlock{};
         StackPanel content;
-        content.Spacing(10.0);
+        content.Spacing(6.0);
         const auto id = std::to_string(widget->Key) + "_" + std::to_string(lineKey);
         const auto* current = FindMetric(line->Metric.MetricId);
         if (widget->Metrics.size() > 1) {
@@ -473,8 +504,8 @@ namespace pmon::ui::views
             box.IsSuggestionListOpen(false);
         });
 
-        std::vector<UIElement> fields;
-        fields.push_back(Field("Metric", metricBox));
+        std::vector<FieldItem> fields = std::move(leadingFields);
+        fields.push_back({ Field("Metric", metricBox), 2.5 });
         std::vector<const core::MetricStat*> stats;
         if (current) {
             for (const auto& stat : session_->Introspection().Stats) {
@@ -488,19 +519,19 @@ namespace pmon::ui::views
                 names.push_back(stats[i]->Name);
                 if (stats[i]->Id == line->Metric.StatId) selection = (int)i;
             }
-            fields.push_back(Field("Statistic", FormControls::Choice("Stat_" + id, "Statistic", names, selection,
+            fields.push_back({ Field("Statistic", FormControls::Choice("Stat_" + id, "Statistic", names, selection,
                 [this, widget, lineKey, stats](int selected) {
                     if (auto* refreshed = FindLine(widget, lineKey); refreshed && selected >= 0 && selected < (int)stats.size()) {
                         refreshed->Metric.StatId = stats[(size_t)selected]->Id;
                         NotifyChanged();
                     }
-                })));
+                })), 1.2 });
         }
         else {
             TextBlock unavailable;
             unavailable.Text(pmon::ui::localization::Format("Unavailable ({0})", { std::to_string(line->Metric.StatId) }));
             unavailable.TextWrapping(TextWrapping::Wrap);
-            fields.push_back(Field("Statistic", unavailable));
+            fields.push_back({ Field("Statistic", unavailable), 1.2 });
         }
 
         if (current) {
@@ -527,7 +558,7 @@ namespace pmon::ui::views
                     if (devices[i] == line->Metric.DeviceId || (!devices[i] && !line->Metric.DeviceId)) selection = (int)i;
                 }
                 const auto metricId = current->Id;
-                fields.push_back(Field("GPU device", FormControls::Choice("Device_" + id, "GPU device", deviceChoices, selection,
+                fields.push_back({ Field("GPU device", FormControls::Choice("Device_" + id, "GPU device", deviceChoices, selection,
                     [this, widget, lineKey, metricId, devices](int selected) {
                         auto* refreshed = FindLine(widget, lineKey);
                         const auto* currentMetric = FindMetric(metricId);
@@ -536,52 +567,58 @@ namespace pmon::ui::views
                         core::MetricResolver::Normalize(*currentMetric, refreshed->Metric, session_->Introspection(), session_->Preferences());
                         NotifyChanged();
                         Refresh();
-                    })));
+                    })), 1.5 });
             }
             const auto arraySize = core::MetricResolver::ArraySize(*current, effectiveId);
             if (arraySize > 1) {
-                fields.push_back(Field("Array index", FormControls::Number("ArrayIndex_" + id, "Array index", line->Metric.ArrayIndex,
+                fields.push_back({ Field("Array index", FormControls::Number("ArrayIndex_" + id, "Array index", line->Metric.ArrayIndex,
                     0.0, (double)arraySize - 1.0, 1.0, [this, widget, lineKey](double value) {
                         if (auto* refreshed = FindLine(widget, lineKey)) {
                             refreshed->Metric.ArrayIndex = (int)value;
                             NotifyChanged();
                         }
-                    })));
+                    })), 0.9 });
             }
         }
-        content.Children().Append(Fields(fields, 3));
+        content.Children().Append(Fields(fields, (int)fields.size(), 150.0));
         if (current && !core::MetricResolver::IsAvailable(*current, line->Metric, session_->Introspection(), session_->Preferences())) {
             content.Children().Append(FormControls::Description(core::MetricResolver::AvailabilityReason(*current, line->Metric,
                 session_->Introspection(), session_->Preferences()).value_or("This metric is unavailable.")));
         }
         if (const auto graph = std::dynamic_pointer_cast<core::Graph>(widget)) {
-            std::vector<UIElement> appearance;
+            std::vector<FieldItem> appearance;
             if (graph->GraphType.Name == "Line") {
-                appearance.push_back(Field("Right axis", FormControls::Toggle("RightAxis_" + id, "Use right axis",
+                appearance.push_back({ Field("Right axis", FormControls::Toggle("RightAxis_" + id, "Use right axis",
                     line->AxisAffinity == core::AxisAffinity::Right, [this, widget, lineKey](bool value) {
                         if (auto* refreshed = FindLine(widget, lineKey)) {
                             refreshed->AxisAffinity = value ? core::AxisAffinity::Right : core::AxisAffinity::Left;
                             NotifyChanged();
                         }
-                    })));
+                    })), 1.0 });
             }
-            appearance.push_back(Field("Line color", Color("LineColor_" + id, "Line color", line->LineColor,
+            appearance.push_back({ Field("Line color", Color("LineColor_" + id, "Line color", line->LineColor,
                 [this, widget, lineKey](core::RgbaColor value) {
                     if (auto* refreshed = FindLine(widget, lineKey)) refreshed->LineColor = value;
                     NotifyChanged();
-                })));
-            appearance.push_back(Field("Fill color", Color("FillColor_" + id, "Fill color", line->FillColor,
+                })), 1.0 });
+            appearance.push_back({ Field("Fill color", Color("FillColor_" + id, "Fill color", line->FillColor,
                 [this, widget, lineKey](core::RgbaColor value) {
                     if (auto* refreshed = FindLine(widget, lineKey)) refreshed->FillColor = value;
                     NotifyChanged();
-                })));
-            content.Children().Append(Fields(appearance, 3));
+                })), 1.0 });
+            if (trailingAppearance) {
+                appearance.push_back({ trailingAppearance, 1.0 });
+            }
+            content.Children().Append(Fields(appearance, (int)appearance.size(), 150.0));
+        }
+        if (lineIndex == 0 && widget->Metrics.size() <= 1) {
+            return content;
         }
         auto series = Microsoft::UI::Xaml::Markup::XamlReader::Load(LR"(
             <Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                 Background="{ThemeResource LayerFillColorDefaultBrush}" />
             )").as<Border>();
-        series.Padding(Thickness{ 12.0, 12.0, 12.0, 12.0 });
+        series.Padding(Thickness{ 8.0, 6.0, 8.0, 6.0 });
         series.CornerRadius(CornerRadius{ 6.0 });
         series.Child(content);
         return series;
@@ -936,8 +973,10 @@ namespace pmon::ui::views
     UIElement LoadoutView::Field(const std::string& label, const UIElement& control)
     {
         StackPanel field;
-        field.Spacing(5.0);
-        field.Children().Append(FormControls::Description(label));
+        field.Spacing(2.0);
+        auto caption = FormControls::Description(label);
+        caption.FontSize(11.0);
+        field.Children().Append(caption);
         if (const auto element = control.try_as<FrameworkElement>()) element.HorizontalAlignment(HorizontalAlignment::Stretch);
         field.Children().Append(control);
         return field;
@@ -945,25 +984,51 @@ namespace pmon::ui::views
 
     Grid LoadoutView::Fields(const std::vector<UIElement>& content, int maximumColumns)
     {
-        Grid grid;
-        grid.ColumnSpacing(12.0);
-        grid.RowSpacing(12.0);
-        auto hosts = std::make_shared<std::vector<Grid>>();
-        hosts->reserve(content.size());
+        std::vector<FieldItem> items;
+        items.reserve(content.size());
         for (const auto& child : content) {
+            items.push_back({ child, 1.0 });
+        }
+        return Fields(items, maximumColumns, 210.0);
+    }
+
+    Grid LoadoutView::Fields(const std::vector<FieldItem>& content, int maximumColumns, double minColumnWidth)
+    {
+        Grid grid;
+        grid.ColumnSpacing(8.0);
+        grid.RowSpacing(6.0);
+        auto hosts = std::make_shared<std::vector<Grid>>();
+        auto weights = std::make_shared<std::vector<double>>();
+        hosts->reserve(content.size());
+        weights->reserve(content.size());
+        for (const auto& item : content) {
             Grid host;
-            host.Children().Append(child);
+            host.Children().Append(item.Element);
             grid.Children().Append(host);
             hosts->push_back(host);
+            weights->push_back(item.Weight > 0.0 ? item.Weight : 1.0);
         }
         auto columns = std::make_shared<int>(0);
-        const auto arrange = [grid, hosts, columns, maximumColumns](double width) {
-            const auto desired = std::clamp((int)(width / 210.0), 1, std::min(maximumColumns, std::max(1, (int)hosts->size())));
+        const auto arrange = [grid, hosts, weights, columns, maximumColumns, minColumnWidth](double width) {
+            const auto maxCols = std::min(maximumColumns, std::max(1, (int)hosts->size()));
+            const auto desired = width <= 0.0
+                ? maxCols
+                : std::clamp((int)(width / minColumnWidth), 1, maxCols);
             if (*columns == desired) return;
             *columns = desired;
             grid.ColumnDefinitions().Clear();
             grid.RowDefinitions().Clear();
-            for (int column = 0; column < *columns; ++column) grid.ColumnDefinitions().Append(StarColumn());
+            const auto useWeights = *columns == (int)hosts->size();
+            for (int column = 0; column < *columns; ++column) {
+                if (useWeights) {
+                    ColumnDefinition definition;
+                    definition.Width(GridLengthHelper::FromValueAndType((*weights)[(size_t)column], GridUnitType::Star));
+                    grid.ColumnDefinitions().Append(definition);
+                }
+                else {
+                    grid.ColumnDefinitions().Append(StarColumn());
+                }
+            }
             for (size_t row = 0; row < (hosts->size() + (size_t)*columns - 1) / (size_t)*columns; ++row) grid.RowDefinitions().Append(AutoRow());
             for (size_t index = 0; index < hosts->size(); ++index) {
                 Grid::SetColumn((*hosts)[index], (int)(index % (size_t)*columns));

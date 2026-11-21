@@ -2,7 +2,7 @@
 
 ## Install Build Tool Dependencies
 
-- Visual Studio 2026 18.7 or newer with Desktop development with C++, Windows SDK 10.0.26100, and C++ test tools. The native WinUI package references require this toolchain; the current validated installation is Visual Studio 2026 18.9.
+- Visual Studio 2026 18.7 or newer (Community/Professional/Enterprise) or Visual Studio Build Tools 2026 18.7 or newer with Desktop development with C++, Windows SDK 10.0.26100, and C++ test tools. The native WinUI package references require this toolchain (including the `Windows Store` C++ MSBuild targets); the current validated installation is Visual Studio 2026 18.9+.
 
 - Windows App SDK build prerequisites are restored through the native project's PackageReference entries.
 
@@ -49,7 +49,7 @@ For a complete local capture application without building the MSI, run:
 > .\Tools\build-capture-app.ps1 -Configuration Debug -RunNativeTests
 ```
 
-This discovers Visual Studio and its bundled vcpkg (or uses `VCPKG_ROOT`), restores the pinned native dependencies and the native WinUI package references, builds the WinUI application, capture kernel, service, and middleware, then builds and runs the native unit tests. Dependency build files stay under `build\vcpkg-cache` and `vcpkg_installed`; vcpkg may also use its standard user registry and binary caches. Use `-SkipRestore` on subsequent builds. `-VisualStudioPath`, `-VcpkgRoot`, and `-PlatformToolset` select explicit tool installations. The native UI requires the v145 toolset from Visual Studio 2026. No global vcpkg integration is required by this script.
+This discovers Visual Studio 2026 (either full IDE editions or Visual Studio Build Tools 2026) and resolves `vcpkg` in order from `-VcpkgRoot` / `VCPKG_ROOT`, the selected Visual Studio installation's `VC\vcpkg`, `PATH`, or another installed Visual Studio instance (so Build Tools installations without a bundled `vcpkg` still work). When restoring native dependencies, `build-capture-app.ps1` initializes the selected Visual Studio developer environment (`VC\Auxiliary\Build\vcvarsall.bat amd64`) before running `vcpkg install`, ensuring `vcpkg` uses the selected IDE or Build Tools instance even when both are installed side by side. It then restores the native WinUI package references, builds the WinUI application, capture kernel, service, and middleware, and builds and runs the native unit tests. Dependency build files stay under `build\vcpkg-cache` and `vcpkg_installed`; vcpkg may also use its standard user registry and binary caches. Use `-SkipRestore` on subsequent builds. `-VisualStudioPath`, `-VcpkgRoot`, and `-PlatformToolset` select explicit tool installations. The native UI requires the v145 toolset from Visual Studio 2026. No global vcpkg integration is required by this script.
 
 `-RunNativeTests` also builds `PresentMonAPI2Tests` and runs the
 `UiProcessGuardTests` class plus `RealtimeTrackProcessTest`. The UI guards

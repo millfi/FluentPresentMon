@@ -2,7 +2,7 @@
 
 ## ビルドツールの依存関係のインストール
 
-- Visual Studio 2026 18.7 以降（C++ によるデスクトップ開発、Windows SDK 10.0.26100、および C++ テストツールを含む）。ネイティブ WinUI パッケージの参照にはこのツールチェーンが必要です。現在検証済みのインストール構成は Visual Studio 2026 18.9 です。
+- Visual Studio 2026 18.7 以降（Community / Professional / Enterprise）または Visual Studio Build Tools 2026 18.7 以降（C++ によるデスクトップ開発、Windows SDK 10.0.26100、および C++ テストツールを含む）。ネイティブ WinUI パッケージの参照にはこのツールチェーン（`Windows Store` C++ MSBuild ターゲットを含む）が必要です。現在検証済みのインストール構成は Visual Studio 2026 18.9 以降です。
 
 - Windows App SDK のビルド前提条件は、ネイティブプロジェクトの PackageReference エントリを通じて復元されます。
 
@@ -49,7 +49,7 @@ MSI をビルドせずに完全なローカルキャプチャアプリケーシ�
 > .\Tools\build-capture-app.ps1 -Configuration Debug -RunNativeTests
 ```
 
-これにより、Visual Studio と同梱の vcpkg（または `VCPKG_ROOT`）が検出され、固定されたネイティブ依存関係とネイティブ WinUI パッケージ参照が復元されます。その後、WinUI アプリケーション、キャプチャカーネル、サービス、およびミドルウェアがビルドされ、ネイティブユニットテストがビルドおよび実行されます。依存関係のビルドファイルは `build\vcpkg-cache` および `vcpkg_installed` に保存されます。また、vcpkg は標準のユーザーレジストリとバイナリキャッシュを使用する場合があります。以降のビルドでは `-SkipRestore` を使用してください。`-VisualStudioPath`、`-VcpkgRoot`、および `-PlatformToolset` で、明示的なツールインストールを選択できます。ネイティブ UI には、Visual Studio 2026 の v145 ツールセットが必要です。このスクリプトでグローバルな vcpkg 統合を行う必要はありません。
+これにより、Visual Studio 2026（通常版 IDE または Visual Studio Build Tools 2026 の両方に対応）が検出され、`vcpkg` は `-VcpkgRoot` / `VCPKG_ROOT`、選択された Visual Studio 内の `VC\vcpkg`、`PATH` 上の `vcpkg.exe`、他のインストール済み Visual Studio 内の `VC\vcpkg` の順で自動解決されます（Build Tools 単体に `vcpkg` が同梱されていない場合でも利用できます）。ネイティブ依存関係の復元時には、`build-capture-app.ps1` が選択された Visual Studio の開発者環境（`VC\Auxiliary\Build\vcvarsall.bat amd64`）を初期化したうえで `vcpkg install` を実行するため、通常版と Build Tools が共存する環境でも選択したインスタンスで確実に復元できます。その後、ネイティブ WinUI パッケージ参照を復元し、WinUI アプリケーション、キャプチャカーネル、サービス、およびミドルウェアをビルドして、ネイティブユニットテストをビルドおよび実行します。依存関係のビルドファイルは `build\vcpkg-cache` および `vcpkg_installed` に保存されます。また、vcpkg は標準のユーザーレジストリとバイナリキャッシュを使用する場合があります。以降のビルドでは `-SkipRestore` を使用してください。`-VisualStudioPath`、`-VcpkgRoot`、および `-PlatformToolset` で、明示的なツールインストールを選択できます。ネイティブ UI には、Visual Studio 2026 の v145 ツールセットが必要です。このスクリプトでグローバルな vcpkg 統合を行う必要はありません。
 
 `-RunNativeTests` は `PresentMonAPI2Tests` もビルドし、
 `UiProcessGuardTests` クラスと `RealtimeTrackProcessTest` を実行します。UI ガードは、

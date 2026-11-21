@@ -39,6 +39,75 @@ function Invoke-CheckedScript {
     }
 }
 
+function Resolve-VcpkgRoot {
+    param(
+        [string]$ExplicitVcpkgRoot,
+        [string]$SelectedVisualStudioPath
+    )
+
+    if ($ExplicitVcpkgRoot) {
+        return $ExplicitVcpkgRoot
+    }
+
+    $candidates = [System.Collections.Generic.List[string]]::new()
+    if ($SelectedVisualStudioPath) {
+        $candidates.Add((Join-Path $SelectedVisualStudioPath "VC\vcpkg"))
+    }
+    $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
+    if ($vcpkgCmd -and $vcpkgCmd.Source) {
+        $candidates.Add((Split-Path -LiteralPath $vcpkgCmd.Source -Parent))
+    }
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path -LiteralPath $vswhere -PathType Leaf) {
+        foreach ($vsInstall in @(& $vswhere -all -products * -property installationPath)) {
+            if ($vsInstall) {
+                $candidates.Add((Join-Path $vsInstall "VC\vcpkg"))
+            }
+        }
+    }
+
+    foreach ($candidate in ($candidates | Select-Object -Unique)) {
+        if ((Test-Path -LiteralPath (Join-Path $candidate "vcpkg.exe") -PathType Leaf) -and
+            (Test-Path -LiteralPath (Join-Path $candidate "scripts\buildsystems\msbuild\vcpkg.targets") -PathType Leaf)) {
+            return $candidate
+        }
+    }
+
+    if ($SelectedVisualStudioPath) {
+        return (Join-Path $SelectedVisualStudioPath "VC\vcpkg")
+    }
+    return $null
+}
+
+function Invoke-VcpkgInVsDevEnv {
+    param(
+        [string]$SelectedVisualStudioPath,
+        [string]$VcpkgExecutable,
+        [string[]]$Arguments
+    )
+
+    $vcvars = Join-Path $SelectedVisualStudioPath "VC\Auxiliary\Build\vcvarsall.bat"
+    if (-not (Test-Path -LiteralPath $vcvars -PathType Leaf)) {
+        Invoke-Checked $VcpkgExecutable $Arguments
+        return
+    }
+
+    $quotedArgs = ($Arguments | ForEach-Object { '"' + ($_ -replace '"', '\"') + '"' }) -join ' '
+    $vsInstallerDir = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer"
+    $pathPrefix = if (Test-Path -LiteralPath $vsInstallerDir -PathType Container) {
+        "set `"PATH=$vsInstallerDir;%PATH%`" && "
+    }
+    else {
+        ""
+    }
+    # Initialize the selected VS developer environment so vcpkg recognizes both VS IDE and Build Tools instances.
+    $cmdLine = "${pathPrefix}call `"$vcvars`" amd64 >nul && `"$VcpkgExecutable`" $quotedArgs"
+    & cmd.exe /d /c $cmdLine
+    if ($LASTEXITCODE -ne 0) {
+        throw "$VcpkgExecutable failed with exit code $LASTEXITCODE."
+    }
+}
+
 try {
     Set-Location $repoRoot
     if (-not $VisualStudioPath) {
@@ -54,9 +123,7 @@ try {
     if (-not $PlatformToolset) {
         $PlatformToolset = if ((Get-Item -LiteralPath $msbuild).VersionInfo.FileMajorPart -ge 18) { "v145" } else { "v143" }
     }
-    if (-not $VcpkgRoot) {
-        $VcpkgRoot = Join-Path $VisualStudioPath "VC\vcpkg"
-    }
+    $VcpkgRoot = Resolve-VcpkgRoot -ExplicitVcpkgRoot $VcpkgRoot -SelectedVisualStudioPath $VisualStudioPath
     $vcpkg = Join-Path $VcpkgRoot "vcpkg.exe"
     $vcpkgTargets = Join-Path $VcpkgRoot "scripts\buildsystems\msbuild\vcpkg.targets"
     if (-not (Test-Path -LiteralPath $vcpkg)) {
@@ -66,7 +133,7 @@ try {
     $installedDir = Join-Path $repoRoot "vcpkg_installed"
     $cacheDir = Join-Path $repoRoot "build\vcpkg-cache"
     if (-not $SkipRestore) {
-        Invoke-Checked $vcpkg @(
+        Invoke-VcpkgInVsDevEnv -SelectedVisualStudioPath $VisualStudioPath -VcpkgExecutable $vcpkg -Arguments @(
             "install", "--triplet", "x64-windows-static", "--host-triplet", "x64-windows-static",
             "--x-install-root=$installedDir", "--x-buildtrees-root=$cacheDir\buildtrees",
             "--x-packages-root=$cacheDir\packages", "--downloads-root=$cacheDir\downloads"

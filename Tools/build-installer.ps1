@@ -54,6 +54,34 @@ function Resolve-VisualStudioPath {
     return $null
 }
 
+function Resolve-VcpkgRoot([string]$ExplicitVcpkgRoot, [string]$SelectedVisualStudioPath) {
+    if ($ExplicitVcpkgRoot) { return $ExplicitVcpkgRoot }
+    $candidates = [System.Collections.Generic.List[string]]::new()
+    if ($SelectedVisualStudioPath) {
+        $candidates.Add((Join-Path $SelectedVisualStudioPath 'VC\vcpkg'))
+    }
+    $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
+    if ($vcpkgCmd -and $vcpkgCmd.Source) {
+        $candidates.Add((Split-Path -LiteralPath $vcpkgCmd.Source -Parent))
+    }
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+    if (Test-Path -LiteralPath $vswhere -PathType Leaf) {
+        foreach ($vsInstall in @(& $vswhere -all -products * -property installationPath)) {
+            if ($vsInstall) {
+                $candidates.Add((Join-Path $vsInstall 'VC\vcpkg'))
+            }
+        }
+    }
+    foreach ($candidate in ($candidates | Select-Object -Unique)) {
+        if ((Test-Path -LiteralPath (Join-Path $candidate 'vcpkg.exe') -PathType Leaf) -and
+            (Test-Path -LiteralPath (Join-Path $candidate 'scripts\buildsystems\msbuild\vcpkg.targets') -PathType Leaf)) {
+            return $candidate
+        }
+    }
+    if ($SelectedVisualStudioPath) { return (Join-Path $SelectedVisualStudioPath 'VC\vcpkg') }
+    return $null
+}
+
 if (-not (Get-Command winapp -ErrorAction SilentlyContinue)) {
     throw 'winapp CLI is required. Install it with: winget install Microsoft.winappcli --source winget'
 }
@@ -93,7 +121,7 @@ try {
     if (-not $SkipBuild) {
         if (-not $VisualStudioPath) { $VisualStudioPath = Resolve-VisualStudioPath }
         if (-not $VisualStudioPath) { throw 'Install Visual Studio 2026 18.7 or newer with Desktop development with C++ and Windows SDK.' }
-        if (-not $VcpkgRoot) { $VcpkgRoot = Join-Path $VisualStudioPath 'VC\vcpkg' }
+        $VcpkgRoot = Resolve-VcpkgRoot -ExplicitVcpkgRoot $VcpkgRoot -SelectedVisualStudioPath $VisualStudioPath
         $msbuild = Join-Path $VisualStudioPath 'MSBuild\Current\Bin\MSBuild.exe'
 
         $global:LASTEXITCODE = 0
